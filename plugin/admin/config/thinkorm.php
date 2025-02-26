@@ -8,11 +8,11 @@ return [
             // 服务器地址
             'hostname' => '122.114.74.62',
             // 数据库名
-            'database' => '1212caizhao_62_h',
+            'database' => '1212caipiao_62_h',
             // 数据库用户名
-            'username' => '1212caizhao_62_h',
+            'username' => '1212caipiao_62_h',
             // 数据库密码
-            'password' => 'TY12Hy59mDrnCB4m',
+            'password' => 'Jd7MQ2rfEeWHGmAz',
             // 数据库连接端口
             'hostport' => 3306,
             // 数据库连接参数
