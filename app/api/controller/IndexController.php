@@ -16,39 +16,11 @@ class IndexController extends Base
 
     function index(Request $request)
     {
-        $type = $request->post('type',2);#类型:1=早场,2=晚场
         $request->user_id = 1;
-        // 获取今天和昨天的日期范围
-        $today = \Carbon\Carbon::today();
-        $yesterday = Carbon::yesterday();
-        // 查询今天和昨天的信息并按日期分组
-        $rows = LotteryFootball::whereDate('created_at', '>=', $yesterday)
-            ->where('type', $type)
-            ->whereDate('created_at', '<=', $today)
-            ->orderByDesc('id')
-            ->get()
-            ->groupBy(function ($row) {
-                return $row->created_at->toDateString();
-            });
-        // 获取所有 lottery_football_id
-        $lotteryFootballIds = $rows->flatten()->pluck('id')->toArray();
-
-        // 获取这些 id 在 LotteryFootballLog 中的记录
-        $logRecords = LotteryFootballLog::whereIn('lottery_football_id', $lotteryFootballIds)
-            ->where('user_id',$request->user_id)
-            ->pluck('lottery_football_id')
-            ->toArray();
-        // 将分组后的结果转换为所需的格式
-        $groupedRows = $rows->map(function ($list, $date)use($logRecords) {
-            return [
-                'date' => $date,
-                'list' => $list->map(function ($item) use ($logRecords) {
-                    $item->has_log = in_array($item->id, $logRecords);
-                    return $item;
-                })
-            ];
-        })->values()->toArray();
-        return $this->success('获取成功', $groupedRows);
+        $user = User::find($request->user_id);
+        $user->vip_expire_time->addDays(1);
+        dump($user->vip_expire_time->toDateTimeString());
+        dump($user->vip_expire_time->addDays(1)->toDateTimeString());
     }
 
 }

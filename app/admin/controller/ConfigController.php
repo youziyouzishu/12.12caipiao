@@ -56,6 +56,10 @@ class ConfigController extends Crud
         $data['end_time'] = $post['end_time'] ?? '';
         $data['early_stop_time'] = $post['early_stop_time'] ?? '';
         $data['end_stop_time'] = $post['end_stop_time'] ?? '';
+        $data['vip_rule'] = $post['vip_rule'] ?? '';
+        $data['pay_rule'] = $post['pay_rule'] ?? '';
+        $data['vip_original'] = $post['vip_original'] ?? '';
+        $data['vip_price'] = $post['vip_price'] ?? '';
         $name = 'admin_config';
         Option::where('name', $name)->update([
             'value' => json_encode($data)

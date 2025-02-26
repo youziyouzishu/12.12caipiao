@@ -33,6 +33,7 @@ use support\Db;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @property \Illuminate\Support\Carbon|null $vip_expire_time VIP过期时间
  * @mixin \Eloquent
  */
 class User extends Base
@@ -72,7 +73,41 @@ class User extends Base
         'updated_at',
         'role',
         'status',
+        'vip_expire_time'
     ];
+
+    protected $casts = [
+        'vip_expire_time' => 'datetime',
+    ];
+
+
+    /**
+     * 变更会员积分
+     * @param numeric $score 积分
+     * @param int $user_id 会员ID
+     * @param string $memo 备注
+     * @param string $type
+     * @throws \Throwable
+     */
+    public static function score($score, $user_id, $memo, $type)
+    {
+        Db::connection('plugin.admin.mysql')->beginTransaction();
+        try {
+            $user = self::lockForUpdate()->find($user_id);
+            if ($user && $score != 0) {
+                $before = $user->$type;
+                $after = $user->$type + $score;
+                //更新会员信息
+                $user->$type = $after;
+                $user->save();
+                //写入日志
+                UsersScoreLog::create(['user_id' => $user_id, 'score' => $score, 'before' => $before, 'after' => $after, 'memo' => $memo, 'type' => $type]);
+            }
+            Db::connection('plugin.admin.mysql')->commit();
+        } catch (\Throwable $e) {
+            Db::connection('plugin.admin.mysql')->rollback();
+        }
+    }
 
 
 

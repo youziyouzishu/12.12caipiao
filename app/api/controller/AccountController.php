@@ -74,6 +74,7 @@ class AccountController extends Base
             'username' => $mobile,
             'mobile' => $mobile,
             'password' => Util::passwordHash($password),
+            'vip_expire_time' => Carbon::now()->addDays(25)->toDateTimeString(),
         ]);
         $token = JwtToken::generateToken([
             'id' => $user->id,

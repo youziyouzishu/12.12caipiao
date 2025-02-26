@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\admin\model\LotteryFootball;
 use app\admin\model\LotteryFootballLog;
 use app\admin\model\LotteryHistory;
+use app\admin\model\LotteryKnow;
 use app\api\basic\Base;
 use Carbon\Carbon;
 use support\Request;
@@ -78,6 +79,18 @@ class LotteryController extends Base
             'total_gain_amount'=>$rows->sum('gain_amount'),
             'total_loss_amount'=>$rows->sum('loss_amount'),
         ]]);
+    }
+
+    function getKnowList(Request $request)
+    {
+        $rows = LotteryKnow::orderByDesc('id')->get();
+        return $this->success('获取成功', $rows);
+    }
+    function getKnowDetail(Request $request)
+    {
+        $lottery_know_id = $request->get('lottery_know_id');
+        $row = LotteryKnow::find($lottery_know_id);
+        return $this->success('获取成功', $row);
     }
 
 
