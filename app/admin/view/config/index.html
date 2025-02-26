@@ -67,16 +67,31 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">竞彩足球早场</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" id="early_time" placeholder="H点m分">
+                                <input type="text" name="early_time" class="layui-input" id="early_time" placeholder=" - ">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">竞彩足球晚场</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" id="end_time" placeholder=" - ">
+                                <input type="text" name="end_time" class="layui-input" id="end_time" placeholder=" - ">
                             </div>
                         </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">竞彩足球早场截止时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="early_stop_time" class="layui-input" id="early_stop_time" placeholder=" - ">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">竞彩足球晚场截止时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="end_stop_time" class="layui-input" id="end_stop_time" placeholder=" - ">
+                            </div>
+                        </div>
+
 
 
 
@@ -145,7 +160,9 @@
         laydate.render({
             elem: "#early_time",
             type: "time",
-            format: 'H点m分',
+            range: true,
+            format: 'HH:mm',
+            rangeLinked:true,
         });
 
         laydate.render({
@@ -154,6 +171,18 @@
             range: true,
             format: 'HH:mm',
             rangeLinked:true,
+        });
+
+        laydate.render({
+            elem: "#early_stop_time",
+            type: "time",
+            format: 'HH:mm',
+        });
+
+        laydate.render({
+            elem: "#end_stop_time",
+            type: "time",
+            format: 'HH:mm',
         });
 
     });
