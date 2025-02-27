@@ -34,6 +34,16 @@ use support\Db;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
  * @property \Illuminate\Support\Carbon|null $vip_expire_time VIP过期时间
+ * @property string $openid 微信标识
+ * @property int $user_type 用户类型:0=普通用户,1=官方用户
+ * @property int $parent_id 上级
+ * @property string $invitecode 邀请码
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \app\admin\model\UsersShoper> $shoper
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \app\admin\model\VipOrders> $vipOrders
+ * @property-read mixed $is_shoper 是否店长:false=否,true=是
+ * @property-read mixed $vip_status 会员类型:0=普通用户,1=正式会员,2=体验会员
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $children
+ * @property-read User|null $parent
  * @mixin \Eloquent
  */
 class User extends Base
@@ -73,12 +83,17 @@ class User extends Base
         'updated_at',
         'role',
         'status',
-        'vip_expire_time'
+        'vip_expire_time',
+        'user_type',
+        'parent_id',
+        'invitecode',
     ];
 
     protected $casts = [
         'vip_expire_time' => 'datetime',
     ];
+
+    protected $appends = ['is_shoper','vip_status'];
 
 
     /**
@@ -108,6 +123,55 @@ class User extends Base
             Db::connection('plugin.admin.mysql')->rollback();
         }
     }
+
+    public static function generateInvitecode()
+    {
+        do {
+            $invitecode = mt_rand(10000, 99999);
+        } while (self::where(['invitecode' => $invitecode])->exists());
+        return $invitecode;
+    }
+
+    function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id', 'id');
+    }
+
+    function children()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+
+    function vipOrders()
+    {
+        return $this->hasMany(VipOrders::class, 'user_id', 'id');
+    }
+
+    function shoper()
+    {
+        return $this->hasMany(UsersShoper::class, 'user_id', 'id');
+    }
+
+    function getIsShoperAttribute($value)
+    {
+        return $this->shoper()->where('status',1)->exists();
+    }
+
+    function getVipStatusAttribute($value)
+    {
+        if ($this->vip_expire_time->isPast()) {
+            $vip_status = 0;
+        } else {
+            $order = $this->vipOrders()->where(['status' => 1])->exists();
+            if ($order) {
+                $vip_status = 1;
+            } else {
+                $vip_status = 2;
+            }
+        }
+        return $vip_status;
+    }
+
 
 
 

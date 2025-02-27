@@ -54,11 +54,15 @@ class AccountController extends Base
         $captcha = $request->post('captcha');
         $password = $request->post('password');
         $password_confirm = $request->post('password_confirm');
+        $invitecode = $request->post('invitecode');
         if ($password != $password_confirm) {
             return $this->fail('两次密码不一致');
         }
         if (strlen($password) < 6) {
             return $this->fail('密码长度不能小于6位');
+        }
+        if (!empty($invitecode) && !$parent = User::where('invitecode', $invitecode)->first()) {
+            return $this->fail('邀请码不存在');
         }
         $captchaResult = Sms::check($mobile, $captcha, 'register');
         if (!$captchaResult) {
@@ -75,6 +79,8 @@ class AccountController extends Base
             'mobile' => $mobile,
             'password' => Util::passwordHash($password),
             'vip_expire_time' => Carbon::now()->addDays(25)->toDateTimeString(),
+            'parent_id' => isset($parent) ? $parent->id : 0,
+            'invitecode' => User::generateInvitecode(),
         ]);
         $token = JwtToken::generateToken([
             'id' => $user->id,

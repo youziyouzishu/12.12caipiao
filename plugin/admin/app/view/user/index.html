@@ -245,87 +245,35 @@
 						field: "id",
 						sort: true,
 					},{
-						title: "用户名",
-						field: "username",
-					},{
 						title: "昵称",
 						field: "nickname",
 					},{
-						title: "密码",
-						field: "password",
-						hide: true,
-					},{
-						title: "性别",
-						field: "sex",
-						templet: function (d) {
-							let field = "sex";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
-						}
-					},{
+                        title: "用户类型",align: "center",
+                        field: "user_type",
+                        templet: function (d) {
+                            let field = "user_type";
+                            if (typeof d[field] == "undefined") return "";
+                            let items = [];
+                            layui.each((d[field] + "").split(","), function (k , v) {
+                                items.push(apiResults[field][v] || v);
+                            });
+                            return util.escape(items.join(","));
+                        }
+                    },{
 						title: "头像",
 						field: "avatar",
 						templet: function (d) {
 							return '<img src="'+encodeURI(d['avatar'])+'" style="max-width:32px;max-height:32px;" alt="" />'
 						}
 					},{
-						title: "邮箱",
-						field: "email",
-					},{
 						title: "手机",
 						field: "mobile",
 					},{
-						title: "等级",
-						field: "level",
-						hide: true,
-					},{
-						title: "生日",
-						field: "birthday",
-						hide: true,
-					},{
 						title: "余额(元)",
 						field: "money",
-						hide: true,
-					},{
-						title: "积分",
-						field: "score",
-						hide: true,
-					},{
-						title: "登录时间",
-						field: "last_time",
-						hide: true,
-					},{
-						title: "登录ip",
-						field: "last_ip",
-						hide: true,
 					},{
 						title: "注册时间",
 						field: "join_time",
-						hide: true,
-					},{
-						title: "注册ip",
-						field: "join_ip",
-						hide: true,
-					},{
-						title: "token",
-						field: "token",
-						hide: true,
-					},{
-						title: "创建时间",
-						field: "created_at",
-						hide: true,
-					},{
-						title: "更新时间",
-						field: "updated_at",
-						hide: true,
-					},{
-						title: "角色",
-						field: "role",
-						hide: true,
 					},{
 						title: "禁用",
 						field: "status",
@@ -384,9 +332,9 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
-				apis.push(["sex", "/app/admin/dict/get/sex"]);
+
 				let apiResults = {};
-				apiResults["sex"] = [];
+                apiResults["user_type"] = ['普通用户','管理员'];
 				let count = apis.length;
 				layui.each(apis, function (k, item) {
 				    let [field, url] = item;

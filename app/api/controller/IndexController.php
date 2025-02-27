@@ -8,6 +8,7 @@ use app\admin\model\User;
 use app\api\basic\Base;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use plugin\admin\app\model\Option;
 use support\Request;
 
 class IndexController extends Base
@@ -16,11 +17,10 @@ class IndexController extends Base
 
     function index(Request $request)
     {
-        $request->user_id = 1;
-        $user = User::find($request->user_id);
-        $user->vip_expire_time->addDays(1);
-        dump($user->vip_expire_time->toDateTimeString());
-        dump($user->vip_expire_time->addDays(1)->toDateTimeString());
+        $row = Option::where('name', 'admin_config')->value('value');
+        $config = json_decode($row);
+        $config->vip_original = 1;
+        dump($config);
     }
 
 }

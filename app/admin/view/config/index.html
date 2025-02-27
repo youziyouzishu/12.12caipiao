@@ -115,6 +115,55 @@
                             </div>
                         </div>
 
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">邀请海报</label>
+                            <div class="layui-input-block">
+                                <img class="img-3" src=""/>
+                                <input type="text" style="display:none" name="poster_image" value="" />
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="poster_image" permission="app.admin.upload.image">
+                                    <i class="layui-icon layui-icon-upload"></i>上传图片
+                                </button>
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-poster_image" permission="app.admin.upload.attachment">
+                                    <i class="layui-icon layui-icon-align-left"></i>选择图片
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邀请说明</label>
+                            <div class="layui-input-block">
+                                <textarea style="width: 400px;"  id="invite_rule" name="invite_rule" required  lay-verify="required" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">客服二维码</label>
+                            <div class="layui-input-block">
+                                <img class="img-3" src=""/>
+                                <input type="text" style="display:none" name="kefu_qr" value="" />
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="kefu_qr" permission="app.admin.upload.image">
+                                    <i class="layui-icon layui-icon-upload"></i>上传图片
+                                </button>
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-kefu_qr" permission="app.admin.upload.attachment">
+                                    <i class="layui-icon layui-icon-align-left"></i>选择图片
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">客服微信</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="kefu_wechat"  lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">客服手机号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="kefu_mobile"  lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
 
 
 
@@ -338,6 +387,66 @@
     layui.use(["upload", "layer", "popup"], function() {
         let $ = layui.$;
         let form = layui.form;
+
+        // kefu_qr
+        let kefu_qr = $("#kefu_qr").prev();
+        kefu_qr.prev().attr("src", kefu_qr.val());
+        layui.$("#attachment-choose-kefu_qr").on("click", function() {
+            parent.layer.open({
+                type: 2,
+                title: "选择附件",
+                content: "/app/admin/upload/attachment?ext=jpg,jpeg,png,gif,bmp",
+                area: ["95%", "90%"],
+                success: function (layero, index) {
+                    parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                        kefu_qr.val(data.url).prev().attr("src", data.url);
+                    });
+                }
+            });
+        });
+        layui.upload.render({
+            elem: "#kefu_qr",
+            url: "/app/admin/upload/image",
+            acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+            done: function (res) {
+                if (res.code) {
+                    return layui.popup.failure(res.msg);
+                }
+                this.item.prev().val(res.data.url).prev().attr("src", res.data.url);
+            }
+        });
+
+        // poster_image
+        let poster_image = $("#poster_image").prev();
+        poster_image.prev().attr("src", poster_image.val());
+        layui.$("#attachment-choose-poster_image").on("click", function() {
+            parent.layer.open({
+                type: 2,
+                title: "选择附件",
+                content: "/app/admin/upload/attachment?ext=jpg,jpeg,png,gif,bmp",
+                area: ["95%", "90%"],
+                success: function (layero, index) {
+                    parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                        poster_image.val(data.url).prev().attr("src", data.url);
+                    });
+                }
+            });
+        });
+        layui.upload.render({
+            elem: "#poster_image",
+            url: "/app/admin/upload/image",
+            acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+            done: function (res) {
+                if (res.code) {
+                    return layui.popup.failure(res.msg);
+                }
+                this.item.prev().val(res.data.url).prev().attr("src", res.data.url);
+            }
+        });
+
+
+
+
         // 提交
         form.on("submit(saveConfig)", function(data){
             $.ajax({
@@ -370,6 +479,9 @@
                     return layui.popup.failure(res.msg);
                 }
                 form.val("config", res.data);
+                $("#kefu_qr").prev().val(res.data.kefu_qr).prev().attr("src", res.data.kefu_qr);
+                $("#poster_image").prev().val(res.data.poster_image).prev().attr("src", res.data.poster_image);
+
             }
         });
 
