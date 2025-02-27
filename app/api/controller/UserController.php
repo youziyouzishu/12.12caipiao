@@ -109,7 +109,7 @@ class UserController extends Base
     #获取账变记录
     function getMoneyList(Request $request)
     {
-        $type = $request->post('type');#money = 金币
+        $type = $request->post('type');#money = 余额
         $date = $request->post('date');
         $status = $request->post('status'); #0=全部 1=支出，2=收入
         $date = Carbon::parse($date);
@@ -192,7 +192,7 @@ class UserController extends Base
         return $this->success('绑定成功');
     }
 
-    #获取海报
+    #获取邀请海报
     function getPoster(Request $request)
     {
         $user = User::find($request->user_id);
@@ -315,32 +315,6 @@ class UserController extends Base
         }
         $user->mobile = $new_mobile;
         $user->username = $new_mobile;
-        $user->save();
-        return $this->success('修改成功');
-    }
-
-    #修改密码
-    function changePassword(Request $request)
-    {
-        $mobile = $request->post('mobile');
-        $captcha = $request->post('captcha');
-        $password = $request->post('password');
-        $password_confirm = $request->post('password_confirm');
-        if ($password != $password_confirm) {
-            return $this->fail('两次密码不一致');
-        }
-        if (strlen($password) < 6) {
-            return $this->fail('密码长度不能小于6位');
-        }
-        $captchaResult = Sms::check($mobile, $captcha, 'resetpwd');
-        if (!$captchaResult) {
-            return $this->fail('验证码错误');
-        }
-        $user = User::where(['mobile'=>$mobile])->first();
-        if (!$user) {
-            return $this->fail('用户不存在');
-        }
-        $user->password = Util::passwordHash($password);
         $user->save();
         return $this->success('修改成功');
     }

@@ -13,7 +13,7 @@ use Tinywan\Jwt\JwtToken;
 class AccountController extends Base
 {
 
-    protected array $noNeedLogin = ['login','register'];
+    protected array $noNeedLogin = ['login','register','changePassword'];
     function login(Request $request)
     {
         $login_type = $request->post('login_type');# 1手机号登录 2密码登录
@@ -89,6 +89,7 @@ class AccountController extends Base
         return $this->success('注册成功', ['user' => $user, 'token' => $token]);
     }
 
+    #更改密码
     function changePassword(Request $request)
     {
         $mobile = $request->post('mobile');

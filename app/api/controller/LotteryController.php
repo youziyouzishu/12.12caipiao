@@ -18,9 +18,10 @@ class LotteryController extends Base
 
     protected array $noNeedLogin = [];
 
+    #获取竞彩足球列表
     function getFootballList(Request $request)
     {
-        $type = $request->post('type',2);#类型:1=早场,2=晚场
+        $type = $request->post('type');#类型:1=早场,2=晚场
         // 获取今天和昨天的日期范围
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
@@ -54,6 +55,7 @@ class LotteryController extends Base
         return $this->success('获取成功', $groupedRows);
     }
 
+    #标记竞彩足球
     function setFootballLog(Request $request)
     {
         $lottery_football_ids = $request->post('lottery_football_ids');
@@ -66,6 +68,7 @@ class LotteryController extends Base
         return $this->success('成功');
     }
 
+    #获取历史数据
     function getHistoryList(Request $request)
     {
         // 获取当前日期
@@ -84,11 +87,14 @@ class LotteryController extends Base
         ]]);
     }
 
+    #获取知识讲座
     function getKnowList(Request $request)
     {
         $rows = LotteryKnow::orderByDesc('id')->get();
         return $this->success('获取成功', $rows);
     }
+
+    #获取知识讲座列表详情
     function getKnowDetail(Request $request)
     {
         $lottery_know_id = $request->get('lottery_know_id');
@@ -149,6 +155,7 @@ class LotteryController extends Base
         return $this->success('获取成功', $rows);
     }
 
+    #添加管理员彩票店
     function addAdminShoper(Request $request)
     {
         $image = $request->post('image');
@@ -168,6 +175,7 @@ class LotteryController extends Base
         return $this->success('添加成功');
     }
 
+    #编辑管理员彩票店
     function editAdminShoper(Request $request)
     {
         $id = $request->post('id');
@@ -186,6 +194,7 @@ class LotteryController extends Base
         return $this->success('修改成功');
     }
 
+    #删除管理员彩票店
     function delAdminShoper(Request $request)
     {
         $id = $request->post('id');
