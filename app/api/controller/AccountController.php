@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\admin\model\Sms;
 use app\admin\model\User;
+use app\admin\model\UsersLayer;
 use app\api\basic\Base;
 use Carbon\Carbon;
 use plugin\admin\app\common\Util;
@@ -68,6 +69,9 @@ class AccountController extends Base
         if (!$captchaResult) {
             return $this->fail('验证码错误');
         }
+        if (User::where('mobile', $mobile)->exists()) {
+            return $this->fail('手机号已存在');
+        }
         $user = User::create([
             'nickname' => '用户' . Util::alnum(),
             'avatar' => '/app/admin/avatar.png',
@@ -82,6 +86,28 @@ class AccountController extends Base
             'parent_id' => isset($parent) ? $parent->id : 0,
             'invitecode' => User::generateInvitecode(),
         ]);
+        if (isset($parent)) {
+            // 增加直推关系
+            UsersLayer::create([
+                'user_id' => $user->id,
+                'parent_id' => $parent->id,
+                'layer' => 1
+            ]);
+            // 收集多层关系数据
+            $layersToInsert = [];
+            UsersLayer::where('user_id', $parent->id)->get()->each(function (UsersLayer $item) use ($user, &$layersToInsert) {
+                $layersToInsert[] = [
+                    'user_id' => $user->id,
+                    'parent_id' => $item->parent_id,
+                    'layer' => $item->layer + 1
+                ];
+            });
+            // 批量插入多层关系
+            if (!empty($layersToInsert)) {
+                UsersLayer::insert($layersToInsert);
+            }
+        }
+
         $token = JwtToken::generateToken([
             'id' => $user->id,
             'client' => JwtToken::TOKEN_CLIENT_MOBILE
@@ -102,7 +128,7 @@ class AccountController extends Base
         if (strlen($password) < 6) {
             return $this->fail('密码长度不能小于6位');
         }
-        $captchaResult = Sms::check($mobile, $captcha, 'resetpwd');
+        $captchaResult = Sms::check($mobile, $captcha, 'changepwd');
         if (!$captchaResult) {
             return $this->fail('验证码错误');
         }

@@ -16,19 +16,21 @@ use support\Request;
 class LotteryController extends Base
 {
 
-    protected array $noNeedLogin = [];
+    protected array $noNeedLogin = ['getFootballList'];
 
     #获取竞彩足球列表
     function getFootballList(Request $request)
     {
-        $type = $request->post('type');#类型:1=早场,2=晚场
+        $type = $request->post('type');#类型:0全部 1=早场,2=晚场
         // 获取今天和昨天的日期范围
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
         // 查询今天和昨天的信息并按日期分组
         $rows = LotteryFootball::whereDate('created_at', '>=', $yesterday)
-            ->where('type', $type)
             ->whereDate('created_at', '<=', $today)
+            ->when(!empty($type),function ($query)use($type){
+                $query->where('type', $type);
+            })
             ->orderByDesc('id')
             ->get()
             ->groupBy(function ($row) {

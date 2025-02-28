@@ -146,6 +146,9 @@ class UserController extends Base
         if ($user->vip_status != 1){
             return $this->fail('非会员不能提现');
         }
+        if (empty($user->openid)){
+            return $this->fail('请先绑定微信');
+        }
 
         if ($user->money < $withdraw_amount) {
             return $this->fail('余额不足');
