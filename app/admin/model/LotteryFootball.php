@@ -34,6 +34,10 @@ class LotteryFootball extends Base
      */
     protected $primaryKey = 'id';
 
+    protected $fillable = [
+        'type',
+        'image',
+    ];
     protected $appends = [
         'id_text'
     ];

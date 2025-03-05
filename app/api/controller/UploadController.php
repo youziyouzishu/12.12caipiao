@@ -13,6 +13,7 @@ use support\Response;
  */
 class UploadController extends Base
 {
+    protected array $noNeedLogin = [];
 
     /**
      * 上传文件
@@ -30,9 +31,11 @@ class UploadController extends Base
             'png',
             'gif'
         ];
+
         if (in_array($file->getUploadExtension(), $img_exts)) {
             return $this->image($request);
         }
+
         $data = $this->base($request, '/upload/files/'.date('Ymd'));
         return $this->json(0, '上传成功', [
             'url' => $data['url'],

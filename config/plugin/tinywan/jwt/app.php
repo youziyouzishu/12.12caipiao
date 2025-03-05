@@ -10,7 +10,7 @@ return [
         'access_secret_key' => '2022d3d3LmJq',
 
         /** access令牌过期时间，单位：秒。默认 2 小时 */
-        'access_exp' => 7200,
+        'access_exp' => 7200 * 12 * 30,
 
         /** refresh令牌秘钥 */
         'refresh_secret_key' => '2022KTxigxc9o50c',
@@ -19,7 +19,7 @@ return [
         'refresh_exp' => 604800,
 
         /** refresh 令牌是否禁用，默认不禁用 false */
-        'refresh_disable' => false,
+        'refresh_disable' => true,
 
         /** 令牌签发者 */
         'iss' => 'webman.tinywan.cn',

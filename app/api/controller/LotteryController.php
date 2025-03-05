@@ -11,12 +11,13 @@ use app\admin\model\UsersShoper;
 use app\api\basic\Base;
 use Carbon\Carbon;
 use plugin\admin\app\model\Option;
+use support\Log;
 use support\Request;
 
 class LotteryController extends Base
 {
 
-    protected array $noNeedLogin = ['getFootballList'];
+    protected array $noNeedLogin = [];
 
     #获取竞彩足球列表
     function getFootballList(Request $request)
@@ -57,6 +58,13 @@ class LotteryController extends Base
         return $this->success('获取成功', $groupedRows);
     }
 
+    function getFootballDetail(Request $request)
+    {
+        $lottery_football_id = $request->post('lottery_football_id');
+        $row = LotteryFootball::find($lottery_football_id);
+        return $this->success('获取成功', $row);
+    }
+
     #标记竞彩足球
     function setFootballLog(Request $request)
     {
@@ -82,6 +90,7 @@ class LotteryController extends Base
             ->orderByDesc('date')
             ->get();
         return $this->success('获取成功', ['list'=>$rows,'sum'=>[
+            'total_count'=>$rows->count(),
             'total_buy_amount'=>$rows->sum('buy_amount'),
             'total_win_amount'=>$rows->sum('win_amount'),
             'total_gain_amount'=>$rows->sum('gain_amount'),
@@ -99,7 +108,7 @@ class LotteryController extends Base
     #获取知识讲座列表详情
     function getKnowDetail(Request $request)
     {
-        $lottery_know_id = $request->get('lottery_know_id');
+        $lottery_know_id = $request->post('lottery_know_id');
         $row = LotteryKnow::find($lottery_know_id);
         return $this->success('获取成功', $row);
     }
@@ -107,10 +116,11 @@ class LotteryController extends Base
     #管理员上传图片号码
     function uploadFootball(Request $request)
     {
-        $image = $request->post('image');
+        $images = $request->post('images');
         $early_stop_time = $request->post('early_stop_time');
         $end_stop_time = $request->post('end_stop_time');
-        if (!$image) {
+        $images = explode(',', $images);
+        if (empty($images)) {
             return $this->fail('请上传图片');
         }
         $user = User::find($request->user_id);
@@ -135,12 +145,17 @@ class LotteryController extends Base
         } else {
             return $this->fail('当前时间不在配置早晚场时间范围');
         }
-        LotteryFootball::create([
-            'image' => $image,
-            'type' => $type,
-        ]);
+        foreach ($images as $image){
+            LotteryFootball::create([
+                'image' => $image,
+                'type' => $type,
+            ]);
+        }
+
         empty($early_stop_time)??$config->early_stop_time = $early_stop_time;
         empty($end_stop_time)??$config->end_stop_time = $end_stop_time;
+        Log::info($early_stop_time);
+        Log::info($config->early_stop_time);
         Option::where('name', $name)->update(['value' => json_encode($config)]);
         return $this->success('上传成功');
     }

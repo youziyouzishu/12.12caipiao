@@ -202,7 +202,7 @@ class UserController extends Base
 
         $writer = new PngWriter();
         $qrCode = new QrCode(
-            data: 'https://longh.top/register/register.html#/?invitecode=' . $user->invitecode,
+            data: 'https://1212caipiao.62.hzgqapp.com/register/register.html#/?invitecode=' . $user->invitecode,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::Low,
             size: 100,
@@ -267,7 +267,7 @@ class UserController extends Base
         if ($user->vip_status != 1){
             return $this->fail('会员功能，请充值会员');
         }
-        $count = UsersLayer::where(['parent_id',$request->user_id])->whereHas('user',function ($query){
+        $count = UsersLayer::where(['parent_id'=>$request->user_id])->whereHas('user',function ($query){
             $query->whereHas('vipOrders',function ($query){
                 $query->where('status',1);
             })->where('vip_expire_time','>',Carbon::now());
@@ -277,11 +277,11 @@ class UserController extends Base
             return $this->fail('未满足条件');
         }
 
-        $row = UsersShoper::where(['user_id',$request->user_id])->where('status',0)->exists();
+        $row = UsersShoper::where(['user_id'=>$request->user_id])->where('status',0)->exists();
         if ($row) {
             return $this->fail('您已经提交过申请，请耐心等待审核');
         }
-        $row = UsersShoper::where(['user_id',$request->user_id])->where('status',1)->exists();
+        $row = UsersShoper::where(['user_id'=>$request->user_id])->where('status',1)->exists();
         if ($row) {
             return $this->fail('您已经申请过，请勿重复申请');
         }

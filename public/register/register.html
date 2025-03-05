@@ -140,7 +140,7 @@
 
 				<el-form-item label="验证码" prop="captcha">
 					<div style="display: flex">
-						<el-input v-model="form.captcha" placeholder="请输入验证码"></el-input>
+						<el-input autocomplete="off" v-model="form.captcha" placeholder="请输入验证码"></el-input>
 						<div class="yzm" v-if="showCode" @click.prevent="getCode">发送验证码</div>
 						<div class="yzm" v-else>{{sendTime}}s重试</div>
 					</div>
@@ -149,8 +149,7 @@
 
 				<el-form-item label="密码" prop="password">
 					<div style="display: flex">
-						<el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>
-
+						<el-input autocomplete="off" type="password" v-model="form.password" placeholder="请输入密码"></el-input>
 					</div>
 				</el-form-item>
 
