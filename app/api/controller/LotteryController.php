@@ -154,8 +154,6 @@ class LotteryController extends Base
 
         empty($early_stop_time)??$config->early_stop_time = $early_stop_time;
         empty($end_stop_time)??$config->end_stop_time = $end_stop_time;
-        Log::info($early_stop_time);
-        Log::info($config->early_stop_time);
         Option::where('name', $name)->update(['value' => json_encode($config)]);
         return $this->success('上传成功');
     }

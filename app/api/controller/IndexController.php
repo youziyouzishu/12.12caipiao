@@ -18,7 +18,9 @@ class IndexController extends Base
 
     function index(Request $request)
     {
-
+        $request->context['aaaa'] = 1;
+        dump($request->context['aaaa']);
+        return $this->success('获取成功');
     }
 
 }

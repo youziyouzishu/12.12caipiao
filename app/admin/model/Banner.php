@@ -2,23 +2,15 @@
 
 namespace app\admin\model;
 
-
 use plugin\admin\app\model\Base;
 
-
 /**
- * 
- *
- * @property int $id 主键
+ * @property integer $id 主键(主键)
  * @property string $image 图片
- * @property int $weigh 权重
- * @property \Illuminate\Support\Carbon|null $created_at 创建时间
- * @property \Illuminate\Support\Carbon|null $updated_at 更新时间
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Banner newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Banner newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Banner query()
  * @property string $url 链接
- * @mixin \Eloquent
+ * @property integer $weigh 权重
+ * @property string $created_at 创建时间
+ * @property string $updated_at 更新时间
  */
 class Banner extends Base
 {
@@ -35,7 +27,7 @@ class Banner extends Base
      * @var string
      */
     protected $primaryKey = 'id';
-
-
-
+    
+    
+    
 }
