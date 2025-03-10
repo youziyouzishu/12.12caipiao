@@ -38,15 +38,6 @@ class LotteryFootball extends Base
         'type',
         'image',
     ];
-    protected $appends = [
-        'id_text'
-    ];
-
-    function getIdTextAttribute($value)
-    {
-        $value = $value ?? $this->id;
-        return 'TC'.$value;
-    }
     
     
     

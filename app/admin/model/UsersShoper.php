@@ -10,7 +10,7 @@ use plugin\admin\app\model\User;
 
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -44,5 +44,10 @@ class UsersShoper extends Base
     protected $fillable = [
         'user_id', 'image', 'name', 'wechat', 'status'
     ];
+
+    function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
 }

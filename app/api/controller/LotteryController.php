@@ -49,8 +49,9 @@ class LotteryController extends Base
         $groupedRows = $rows->map(function ($list, $date)use($logRecords) {
             return [
                 'date' => $date,
-                'list' => $list->map(function ($item) use ($logRecords) {
+                'list' => $list->map(function ($item, $index) use ($logRecords) {
                     $item->has_log = in_array($item->id, $logRecords);
+                    $item->id_text = 'TC'.$index + 1; // 分配当天序号
                     return $item;
                 })
             ];

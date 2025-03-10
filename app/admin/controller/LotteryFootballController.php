@@ -48,6 +48,11 @@ class LotteryFootballController extends Crud
     public function insert(Request $request): Response
     {
         if ($request->method() === 'POST') {
+            $images = $request->post('images');
+            if (empty($images)) {
+                return $this->fail('请上传图片');
+            }
+            $images = explode(',', $images);
             $name = 'admin_config';
             $config = Option::where('name', $name)->value('value');
             $config = json_decode($config);
@@ -59,18 +64,20 @@ class LotteryFootballController extends Crud
             $end_time_start = Carbon::parse($current_time->toDateString() . ' ' . $end_time_range[0]);
             $end_time_end = Carbon::parse($current_time->toDateString() . ' ' . $end_time_range[1]);
             if ($current_time->between($early_time_start, $early_time_end)) {
-                $request->setParams('post',[
-                    'type'=>1
-                ]);
+                $type = 1;
             } // 判断当前时间是否在 end_time 范围内
             elseif ($current_time->between($end_time_start, $end_time_end)) {
-                $request->setParams('post',[
-                    'type'=>2
-                ]);
+                $type = 2;
             } else {
                 return $this->fail('当前时间不在配置早晚场时间范围');
             }
-            return parent::insert($request);
+            foreach ($images as $image){
+                LotteryFootball::create([
+                    'image' => $image,
+                    'type' => $type,
+                ]);
+            }
+            return $this->json(0, 'ok');
         }
         return view('lottery-football/insert');
     }
