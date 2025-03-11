@@ -11,16 +11,21 @@ use Illuminate\Support\Str;
 use plugin\admin\app\model\Option;
 use support\Log;
 use support\Request;
+use support\Response;
+use Workerman\Coroutine;
+use Workerman\Timer;
 
 class IndexController extends Base
 {
     protected array $noNeedLogin = ['*'];
 
-    function index(Request $request)
+    public function index(): Response
     {
-        $request->context['aaaa'] = 1;
-        dump($request->context['aaaa']);
-        return $this->success('获取成功');
+
+        return  $this->success('success', [
+            'version' => '1.0.0',
+            'time' => time(),
+        ]);
     }
 
 }

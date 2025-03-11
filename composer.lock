@@ -675,16 +675,11 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "6.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/endroid/qr-code.git",
-                "reference": "bdbb06e767efe9abe3c00461662b4059a6cd0b55"
-            },
+            "version": "6.0.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/bdbb06e767efe9abe3c00461662b4059a6cd0b55",
-                "reference": "bdbb06e767efe9abe3c00461662b4059a6cd0b55",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/endroid/qr-code/6.0.5/endroid-qr-code-6.0.5.zip",
+                "reference": "238baddf22500bbfeb2fa1ddc1eb2bd9374a6998",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +709,6 @@
                     "Endroid\\QrCode\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -735,15 +729,9 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/6.0.3"
+                "source": "https://github.com/endroid/qr-code/tree/6.0.5"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/endroid",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-10-29T19:28:52+00:00"
+            "time": "2025-03-07T08:15:43+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -2101,14 +2089,9 @@
         {
             "name": "kriss/webman-eloquent-ide-helper",
             "version": "v1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/krissss/webman-eloquent-ide-helper.git",
-                "reference": "3348f0ee77ff6042648c8f2abeb145441993e854"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/krissss/webman-eloquent-ide-helper/zipball/3348f0ee77ff6042648c8f2abeb145441993e854",
+                "url": "https://mirrors.tencent.com/repository/composer/kriss/webman-eloquent-ide-helper/v1.2.1/kriss-webman-eloquent-ide-helper-v1.2.1.zip",
                 "reference": "3348f0ee77ff6042648c8f2abeb145441993e854",
                 "shasum": ""
             },
@@ -2127,7 +2110,6 @@
                     "Kriss\\WebmanEloquentIdeHelper\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2261,14 +2243,9 @@
         {
             "name": "monolog/monolog",
             "version": "2.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5cf826f2991858b54d5c3809bee745560a1042a7"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5cf826f2991858b54d5c3809bee745560a1042a7",
+                "url": "https://mirrors.tencent.com/repository/composer/monolog/monolog/2.10.0/monolog-monolog-2.10.0.zip",
                 "reference": "5cf826f2991858b54d5c3809bee745560a1042a7",
                 "shasum": ""
             },
@@ -2326,7 +2303,6 @@
                     "Monolog\\": "src/Monolog"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2348,16 +2324,6 @@
                 "issues": "https://github.com/Seldaek/monolog/issues",
                 "source": "https://github.com/Seldaek/monolog/tree/2.10.0"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/Seldaek",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/monolog/monolog",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2024-11-12T12:43:37+00:00"
         },
         {
@@ -2879,14 +2845,9 @@
         {
             "name": "php-ffmpeg/php-ffmpeg",
             "version": "v1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "0fbbc4c6a6336155679adc800616001ae3328c7a"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/0fbbc4c6a6336155679adc800616001ae3328c7a",
+                "url": "https://mirrors.tencent.com/repository/composer/php-ffmpeg/php-ffmpeg/v1.3.1/php-ffmpeg-php-ffmpeg-v1.3.1.zip",
                 "reference": "0fbbc4c6a6336155679adc800616001ae3328c7a",
                 "shasum": ""
             },
@@ -2912,7 +2873,6 @@
                     "Alchemy\\BinaryDriver\\": "src/Alchemy/BinaryDriver"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3720,14 +3680,9 @@
         {
             "name": "ramsey/uuid",
             "version": "4.7.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ramsey/uuid.git",
-                "reference": "91039bc1faa45ba123c4328958e620d382ec7088"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/91039bc1faa45ba123c4328958e620d382ec7088",
+                "url": "https://mirrors.tencent.com/repository/composer/ramsey/uuid/4.7.6/ramsey-uuid-4.7.6.zip",
                 "reference": "91039bc1faa45ba123c4328958e620d382ec7088",
                 "shasum": ""
             },
@@ -3783,7 +3738,6 @@
                     "Ramsey\\Uuid\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3797,16 +3751,6 @@
                 "issues": "https://github.com/ramsey/uuid/issues",
                 "source": "https://github.com/ramsey/uuid/tree/4.7.6"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/ramsey",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/ramsey/uuid",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2024-04-27T21:32:50+00:00"
         },
         {
@@ -5799,14 +5743,9 @@
         {
             "name": "symfony/uid",
             "version": "v7.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/uid.git",
-                "reference": "2d294d0c48df244c71c105a169d0190bfb080426"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/uid/zipball/2d294d0c48df244c71c105a169d0190bfb080426",
+                "url": "https://mirrors.tencent.com/repository/composer/symfony/uid/v7.2.0/symfony-uid-v7.2.0.zip",
                 "reference": "2d294d0c48df244c71c105a169d0190bfb080426",
                 "shasum": ""
             },
@@ -5826,7 +5765,6 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5854,33 +5792,14 @@
             "support": {
                 "source": "https://github.com/symfony/uid/tree/v7.2.0"
             },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2024-09-25T14:21:43+00:00"
         },
         {
             "name": "symfony/var-dumper",
             "version": "v7.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "82b478c69745d8878eb60f9a049a4d584996f73a"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/82b478c69745d8878eb60f9a049a4d584996f73a",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/symfony/var-dumper/v7.2.3/symfony-var-dumper-v7.2.3.zip",
                 "reference": "82b478c69745d8878eb60f9a049a4d584996f73a",
                 "shasum": ""
             },
@@ -5914,7 +5833,6 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5937,20 +5855,6 @@
             "support": {
                 "source": "https://github.com/symfony/var-dumper/tree/v7.2.3"
             },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2025-01-17T11:39:41+00:00"
         },
         {
@@ -6083,14 +5987,9 @@
         {
             "name": "tinywan/exception-handler",
             "version": "v1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tinywan/webman-exception.git",
-                "reference": "5ab8b43aae80c869c0338c8f97865714820eab54"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Tinywan/webman-exception/zipball/5ab8b43aae80c869c0338c8f97865714820eab54",
+                "url": "https://mirrors.tencent.com/repository/composer/tinywan/exception-handler/v1.6.0/tinywan-exception-handler-v1.6.0.zip",
                 "reference": "5ab8b43aae80c869c0338c8f97865714820eab54",
                 "shasum": ""
             },
@@ -6114,7 +6013,6 @@
                     "Tinywan\\ExceptionHandler\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6128,14 +6026,9 @@
         {
             "name": "tinywan/jwt",
             "version": "v1.11.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tinywan/webman-jwt.git",
-                "reference": "0eb9fb0bca368aacd1109abbe26e922e9ce5811b"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Tinywan/webman-jwt/zipball/0eb9fb0bca368aacd1109abbe26e922e9ce5811b",
+                "url": "https://mirrors.tencent.com/repository/composer/tinywan/jwt/v1.11.1/tinywan-jwt-v1.11.1.zip",
                 "reference": "0eb9fb0bca368aacd1109abbe26e922e9ce5811b",
                 "shasum": ""
             },
@@ -6161,7 +6054,6 @@
                     "Tinywan\\Jwt\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6175,14 +6067,9 @@
         {
             "name": "tinywan/validate",
             "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tinywan/webman-validate.git",
-                "reference": "31cc4c3b1fd991ecce2446729891eada09eb0193"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Tinywan/webman-validate/zipball/31cc4c3b1fd991ecce2446729891eada09eb0193",
+                "url": "https://mirrors.tencent.com/repository/composer/tinywan/validate/v1.0.2/tinywan-validate-v1.0.2.zip",
                 "reference": "31cc4c3b1fd991ecce2446729891eada09eb0193",
                 "shasum": ""
             },
@@ -6204,7 +6091,6 @@
                     "Tinywan\\Validate\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6302,16 +6188,11 @@
         },
         {
             "name": "w7corp/easywechat",
-            "version": "6.17.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9"
-            },
+            "version": "6.17.4",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
-                "reference": "42cb7ab75dcba5b43f5be2f7ba755e358f5fcae9",
+                "url": "https://mirrors.tencent.com/repository/composer/w7corp/easywechat/6.17.4/w7corp-easywechat-6.17.4.zip",
+                "reference": "511e15d86008b1ff730277e1d305cdaef18e25d2",
                 "shasum": ""
             },
             "require": {
@@ -6353,7 +6234,6 @@
                     "EasyWeChat\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6373,28 +6253,17 @@
             ],
             "support": {
                 "issues": "https://github.com/w7corp/easywechat/issues",
-                "source": "https://github.com/w7corp/easywechat/tree/6.17.3"
+                "source": "https://github.com/w7corp/easywechat/tree/6.17.4"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/overtrue",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-02-13T06:28:42+00:00"
+            "time": "2025-02-27T03:02:42+00:00"
         },
         {
             "name": "webman/admin",
-            "version": "v2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webman-php/admin.git",
-                "reference": "2bb07a234064ff08427cbbc512fc2e199b4c1e6d"
-            },
+            "version": "v2.1.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webman-php/admin/zipball/2bb07a234064ff08427cbbc512fc2e199b4c1e6d",
-                "reference": "2bb07a234064ff08427cbbc512fc2e199b4c1e6d",
+                "url": "https://mirrors.tencent.com/repository/composer/webman/admin/v2.1.2/webman-admin-v2.1.2.zip",
+                "reference": "23bff8df1bc351811c7f18e7881d710ced27e23a",
                 "shasum": ""
             },
             "require": {
@@ -6415,16 +6284,15 @@
                     "Webman\\Admin\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Webman Admin",
             "support": {
                 "issues": "https://github.com/webman-php/admin/issues",
-                "source": "https://github.com/webman-php/admin/tree/v2.1.1"
+                "source": "https://github.com/webman-php/admin/tree/v2.1.2"
             },
-            "time": "2025-02-07T08:49:49+00:00"
+            "time": "2025-03-01T08:34:18+00:00"
         },
         {
             "name": "webman/captcha",
@@ -6486,16 +6354,11 @@
         },
         {
             "name": "webman/console",
-            "version": "v2.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webman-php/console.git",
-                "reference": "665472858dec1026c717099c62c32dde188db571"
-            },
+            "version": "v2.1.3",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webman-php/console/zipball/665472858dec1026c717099c62c32dde188db571",
-                "reference": "665472858dec1026c717099c62c32dde188db571",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/webman/console/v2.1.3/webman-console-v2.1.3.zip",
+                "reference": "bbee274a5f091eaf90e7a257dd0fbfef47da9a17",
                 "shasum": ""
             },
             "require": {
@@ -6511,7 +6374,6 @@
                     "Webman\\Console\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6535,7 +6397,7 @@
                 "source": "https://github.com/webman-php/console",
                 "wiki": "http://www.workerman.net/doc/webman"
             },
-            "time": "2025-02-24T07:51:48+00:00"
+            "time": "2025-03-06T08:23:07+00:00"
         },
         {
             "name": "webman/database",
@@ -6608,14 +6470,9 @@
         {
             "name": "webman/log",
             "version": "v2.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webman-php/log.git",
-                "reference": "14e3f3e64e87783952417a68cf5205c1293aba69"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webman-php/log/zipball/14e3f3e64e87783952417a68cf5205c1293aba69",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/webman/log/v2.1.3/webman-log-v2.1.3.zip",
                 "reference": "14e3f3e64e87783952417a68cf5205c1293aba69",
                 "shasum": ""
             },
@@ -6628,7 +6485,6 @@
                     "Webman\\Log\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6642,14 +6498,9 @@
         {
             "name": "webman/redis-queue",
             "version": "v1.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webman-php/redis-queue.git",
-                "reference": "80b9ddca0405bbb6d02e6b368e8036b3b1a13814"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webman-php/redis-queue/zipball/80b9ddca0405bbb6d02e6b368e8036b3b1a13814",
+                "url": "https://mirrors.tencent.com/repository/composer/webman/redis-queue/v1.3.2/webman-redis-queue-v1.3.2.zip",
                 "reference": "80b9ddca0405bbb6d02e6b368e8036b3b1a13814",
                 "shasum": ""
             },
@@ -6662,7 +6513,6 @@
                     "Webman\\RedisQueue\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "description": "Redis message queue plugin for webman.",
             "support": {
                 "issues": "https://github.com/webman-php/redis-queue/issues",
@@ -6784,16 +6634,11 @@
         },
         {
             "name": "workerman/webman-framework",
-            "version": "v2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/walkor/webman-framework.git",
-                "reference": "c27f61ea8d940657db540ee01de4b44dd7733fd8"
-            },
+            "version": "v2.1.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/walkor/webman-framework/zipball/c27f61ea8d940657db540ee01de4b44dd7733fd8",
-                "reference": "c27f61ea8d940657db540ee01de4b44dd7733fd8",
+                "url": "https://mirrors.tencent.com/repository/composer/workerman/webman-framework/v2.1.2/workerman-webman-framework-v2.1.2.zip",
+                "reference": "f803bd867f07bb0929faef060b59a19a44186bfc",
                 "shasum": ""
             },
             "require": {
@@ -6801,6 +6646,7 @@
                 "nikic/fast-route": "^1.3",
                 "php": ">=8.1",
                 "psr/container": ">=1.0",
+                "psr/log": "^3.0",
                 "workerman/workerman": "^5.1 || dev-master"
             },
             "suggest": {
@@ -6820,7 +6666,6 @@
                     "Support\\Exception\\": "./src/support/exception"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6845,7 +6690,7 @@
                 "source": "https://github.com/walkor/webman-framework",
                 "wiki": "https://doc.workerman.net/"
             },
-            "time": "2025-02-07T03:20:27+00:00"
+            "time": "2025-03-10T11:52:22+00:00"
         },
         {
             "name": "workerman/workerman",
@@ -7000,14 +6845,9 @@
         {
             "name": "yansongda/pay",
             "version": "v3.7.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yansongda/pay.git",
-                "reference": "6e1678f44acb91ba78900eb74e307de415a54e9d"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yansongda/pay/zipball/6e1678f44acb91ba78900eb74e307de415a54e9d",
+                "url": "https://mirrors.tencent.com/repository/composer/yansongda/pay/v3.7.13/yansongda-pay-v3.7.13.zip",
                 "reference": "6e1678f44acb91ba78900eb74e307de415a54e9d",
                 "shasum": ""
             },
@@ -7047,7 +6887,6 @@
                     "Yansongda\\Pay\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
