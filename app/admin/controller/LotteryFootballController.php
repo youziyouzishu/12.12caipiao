@@ -71,7 +71,7 @@ class LotteryFootballController extends Crud
             } else {
                 return $this->fail('当前时间不在配置早晚场时间范围');
             }
-            foreach ($images as $image){
+            foreach ($images as $image) {
                 LotteryFootball::create([
                     'image' => $image,
                     'type' => $type,

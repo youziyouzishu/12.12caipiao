@@ -87,6 +87,7 @@ class User extends Base
         'user_type',
         'parent_id',
         'invitecode',
+        'openid'
     ];
 
     protected $casts = [
