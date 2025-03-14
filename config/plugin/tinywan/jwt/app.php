@@ -10,7 +10,7 @@ return [
         'access_secret_key' => '2022d3d3LmJq',
 
         /** access令牌过期时间，单位：秒。默认 2 小时 */
-        'access_exp' => 7200 * 12 * 30,
+        'access_exp' => 7200,
 
         /** refresh令牌秘钥 */
         'refresh_secret_key' => '2022KTxigxc9o50c',
@@ -19,7 +19,7 @@ return [
         'refresh_exp' => 604800,
 
         /** refresh 令牌是否禁用，默认不禁用 false */
-        'refresh_disable' => true,
+        'refresh_disable' => false,
 
         /** 令牌签发者 */
         'iss' => 'webman.tinywan.cn',
@@ -31,7 +31,7 @@ return [
         'leeway' => 60,
 
         /** 是否允许单设备登录，默认不允许 false */
-        'is_single_device' => false,
+        'is_single_device' => true,
 
         /** 缓存令牌时间，单位：秒。默认 7 天 */
         'cache_token_ttl' => 604800,
@@ -49,6 +49,7 @@ return [
 
         /** 是否支持 get 请求获取令牌 */
         'is_support_get_token' => false,
+
         /** GET 请求获取令牌请求key */
         'is_support_get_token_key' => 'authorization',
 

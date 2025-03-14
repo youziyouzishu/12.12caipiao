@@ -58,6 +58,13 @@
                         </div>
 
                         <div class="layui-form-item">
+                            <label class="layui-form-label">法律法规标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="law_title"  lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
                             <label class="layui-form-label">支付协议</label>
                             <div class="layui-input-block">
                                 <textarea id="pay_rule" name="pay_rule" required  lay-verify="required" class="layui-textarea"></textarea>
@@ -125,7 +132,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label required">邀请海报</label>
                             <div class="layui-input-block">
-                                <img class="img-3" src=""/>
+                                <img class="img-4" src=""/>
                                 <input type="text" style="display:none" name="poster_image" value="" />
                                 <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="poster_image" permission="app.admin.upload.image">
                                     <i class="layui-icon layui-icon-upload"></i>上传图片
@@ -146,7 +153,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label required">客服二维码</label>
                             <div class="layui-input-block">
-                                <img class="img-3" src=""/>
+                                <img class="img-4" src=""/>
                                 <input type="text" style="display:none" name="kefu_qr" value="" />
                                 <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="kefu_qr" permission="app.admin.upload.image">
                                     <i class="layui-icon layui-icon-upload"></i>上传图片
@@ -168,6 +175,13 @@
                             <label class="layui-form-label">客服手机号</label>
                             <div class="layui-input-block">
                                 <input type="text" name="kefu_mobile"  lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">成为店长要求人数</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="shop_require"  lay-verify="required" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 

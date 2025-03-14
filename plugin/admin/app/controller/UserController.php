@@ -2,18 +2,20 @@
 
 namespace plugin\admin\app\controller;
 
-use plugin\admin\app\model\User;
+
+use app\admin\model\User;
+use Carbon\Carbon;
 use support\exception\BusinessException;
 use support\Request;
 use support\Response;
 use Throwable;
 
 /**
- * 用户管理 
+ * 用户管理
  */
 class UserController extends Crud
 {
-    
+
     /**
      * @var User
      */
@@ -26,6 +28,24 @@ class UserController extends Crud
     public function __construct()
     {
         $this->model = new User;
+    }
+
+    /**
+     * 查询
+     * @param Request $request
+     * @return Response
+     * @throws BusinessException
+     */
+    public function select(Request $request): Response
+    {
+        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
+        $query = $this->doSelect($where, $field, $order)
+            ->withCount(['children as children_vip_count'=>function ($query) {
+                $query->where('vip_expire_time', '>', Carbon::now())->whereHas('vipOrders', function ($query) {
+                    $query->where('status', 1);
+                });
+            }]);
+        return $this->doFormat($query, $format, $limit);
     }
 
     /**
@@ -63,10 +83,10 @@ class UserController extends Crud
         if ($request->method() === 'POST') {
             $param = $request->post();
             $user = $this->model->find($param['id']);
-            if ($user->money != $param['money']){
+            if ($user->money != $param['money']) {
                 //变了账户
                 $difference = $param['money'] - $user->money;
-                \app\admin\model\User::score($difference, $user->id, $difference>0?'管理员增加':'管理员扣除','money');
+                \app\admin\model\User::score($difference, $user->id, $difference > 0 ? '管理员增加' : '管理员扣除', 'money');
             }
             return parent::update($request);
         }

@@ -79,6 +79,19 @@ class LotteryController extends Base
         return $this->success('成功');
     }
 
+    #取消标记
+    function cancelFootballLog(Request $request)
+    {
+        $lottery_football_ids = $request->post('lottery_football_ids');
+        if (!$lottery_football_ids) {
+            return $this->fail('请选择比赛');
+        }
+        foreach ($lottery_football_ids as $football_id){
+            LotteryFootballLog::where(['user_id' => $request->user_id, 'lottery_football_id' => $football_id])->delete();
+        }
+        return $this->success('成功');
+    }
+
     #获取历史数据
     function getHistoryList(Request $request)
     {

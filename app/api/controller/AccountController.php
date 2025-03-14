@@ -14,7 +14,7 @@ use Tinywan\Jwt\JwtToken;
 class AccountController extends Base
 {
 
-    protected array $noNeedLogin = ['login','register','changePassword'];
+    protected array $noNeedLogin = ['login','register','changePassword','refreshToken'];
     function login(Request $request)
     {
         $login_type = $request->post('login_type');# 1手机号登录 2密码登录
@@ -139,5 +139,12 @@ class AccountController extends Base
         $user->password = Util::passwordHash($password);
         $user->save();
         return $this->success('修改成功');
+    }
+
+
+    function refreshToken(Request $request)
+    {
+        $res = JwtToken::refreshToken();
+        return $this->success('刷新成功', $res);
     }
 }

@@ -19,13 +19,16 @@ class IndexController extends Base
 {
     protected array $noNeedLogin = ['*'];
 
-    public function index(): Response
+    public function index()
     {
-
-        return  $this->success('success', [
-            'version' => '1.0.0',
-            'time' => time(),
-        ]);
+        $a = ['a'=>1,'b'=>2];
+        if ($a['a']==1){
+            dump(111);
+        }elseif (is_array($a)){
+            dump(222);
+        }else{
+            dump(333);
+        }
     }
 
 }

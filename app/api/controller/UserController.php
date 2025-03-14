@@ -143,10 +143,10 @@ class UserController extends Base
     {
         $withdraw_amount = $request->post('withdraw_amount');
         $user = User::find($request->user_id);
-        if ($user->vip_status != 1){
+        if ($user->vip_status != 1) {
             return $this->fail('非会员不能提现');
         }
-        if (empty($user->openid)){
+        if (empty($user->openid)) {
             return $this->fail('请先绑定微信');
         }
 
@@ -230,21 +230,21 @@ class UserController extends Base
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
-        $total_direct = UsersLayer::where('parent_id', $user->id)->where('layer',1)->count();#直推总人数
-        $total_indirect = UsersLayer::where('parent_id', $user->id)->where('layer','>',1)->count();#间推总人数
+        $total_direct = UsersLayer::where('parent_id', $user->id)->where('layer', 1)->count();#直推总人数
+        $total_indirect = UsersLayer::where('parent_id', $user->id)->where('layer', '>', 1)->count();#间推总人数
 
 
-        $today_direct = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer',1)->count();
-        $today_indirect = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer','>',1)->count();
+        $today_direct = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer', 1)->count();
+        $today_indirect = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer', '>', 1)->count();
 
-        $week_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer',1)->count();
-        $week_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer','>',1)->count();
+        $week_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer', 1)->count();
+        $week_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer', '>', 1)->count();
 
-        $month_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer',1)->count();
-        $month_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer','>',1)->count();
+        $month_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer', 1)->count();
+        $month_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer', '>', 1)->count();
 
-        return $this->success('获取成功',[
-            'total_team'=>$total_direct + $total_direct,
+        return $this->success('获取成功', [
+            'total_team' => $total_direct + $total_direct,
             'total_direct' => $total_direct,
             'total_indirect' => $total_indirect,
             'today_direct' => $today_direct,
@@ -264,24 +264,29 @@ class UserController extends Base
         $wechat = $request->post('wechat');
 
         $user = User::find($request->user_id);
-        if ($user->vip_status != 1){
+        if ($user->vip_status != 1) {
             return $this->fail('会员功能，请充值会员');
         }
-        $count = UsersLayer::where(['parent_id'=>$request->user_id])->whereHas('user',function ($query){
-            $query->whereHas('vipOrders',function ($query){
-                $query->where('status',1);
-            })->where('vip_expire_time','>',Carbon::now());
+        $count = UsersLayer::where(['parent_id' => $request->user_id])->whereHas('user', function ($query) {
+            $query->whereHas('vipOrders', function ($query) {
+                $query->where('status', 1);
+            })->where('vip_expire_time', '>', Carbon::now());
         })->count();
 
-        if ($count < 50){
+
+        $name = 'admin_config';
+        $config = Option::where('name', $name)->value('value');
+        $config = json_decode($config);
+        $shop_require = $config->shop_require;
+        if ($count < $shop_require) {
             return $this->fail('未满足条件');
         }
 
-        $row = UsersShoper::where(['user_id'=>$request->user_id])->where('status',0)->exists();
+        $row = UsersShoper::where(['user_id' => $request->user_id])->where('status', 0)->exists();
         if ($row) {
             return $this->fail('您已经提交过申请，请耐心等待审核');
         }
-        $row = UsersShoper::where(['user_id'=>$request->user_id])->where('status',1)->exists();
+        $row = UsersShoper::where(['user_id' => $request->user_id])->where('status', 1)->exists();
         if ($row) {
             return $this->fail('您已经申请过，请勿重复申请');
         }
@@ -312,7 +317,7 @@ class UserController extends Base
             return $this->fail('验证码错误');
         }
         $thisuser = User::find($request->user_id);
-        $user = User::where(['mobile'=>$old_mobile])->first();
+        $user = User::where(['mobile' => $old_mobile])->first();
         if (!$user || $user->id != $thisuser->id) {
             return $this->fail('号码与当前用户不一致');
         }
@@ -326,19 +331,18 @@ class UserController extends Base
     function getShoperList(Request $request)
     {
         $user = User::find($request->user_id);
-        if ($user->parent&&$user->parent->is_shoper){
+
+        if ($user->is_shoper) {
+            $rows = UsersShoper::where(['user_id' => $request->user_id, 'status' => 1])->get();
+        } elseif ($user->parent && $user->parent->is_shoper) {
             //上级是店长
-            $rows = UsersShoper::where(['user_id'=>$user->parent->id,'status'=>1])->get();
-        }else{
-            $guanfang = User::where('user_type',1)->pluck('id')->toArray();
-            $rows = UsersShoper::whereIn('user_id',$guanfang)->where(['status'=>1])->get();
+            $rows = UsersShoper::where(['user_id' => $user->parent->id, 'status' => 1])->get();
+        } else {
+            $guanfang = User::where('user_type', 1)->pluck('id')->toArray();
+            $rows = UsersShoper::whereIn('user_id', $guanfang)->where(['status' => 1])->get();
         }
-        return $this->success('获取成功',$rows);
+        return $this->success('获取成功', $rows);
     }
-
-
-
-
 
 
 }
