@@ -103,12 +103,21 @@ class LotteryController extends Base
             ->whereDate('date', '<=', $today)
             ->orderByDesc('date')
             ->get();
+        $rows = $rows->map(function ($row) {
+            $row->buy_amount = rtrim(rtrim(number_format($row->buy_amount, 4, '.', ''), '0'), '.');
+            $row->win_amount = rtrim(rtrim(number_format($row->win_amount, 4, '.', ''), '0'), '.');
+            $row->gain_amount = rtrim(rtrim(number_format($row->gain_amount, 4, '.', ''), '0'), '.');
+            $row->loss_amount = rtrim(rtrim(number_format($row->loss_amount, 4, '.', ''), '0'), '.');
+            return $row;
+        });
+        $total_buy_amount = rtrim(rtrim(number_format($rows->sum('buy_amount'), 4, '.', ''), '0'), '.');
+        $total_win_amount = rtrim(rtrim(number_format($rows->sum('win_amount'), 4, '.', ''), '0'), '.');
+        $total_profit_amount = rtrim(rtrim(number_format($rows->sum('gain_amount') - $rows->sum('loss_amount'), 4, '.', ''), '0'), '.');
         return $this->success('获取成功', ['list'=>$rows,'sum'=>[
             'total_count'=>$rows->count(),
-            'total_buy_amount'=>$rows->sum('buy_amount'),
-            'total_win_amount'=>$rows->sum('win_amount'),
-            'total_gain_amount'=>$rows->sum('gain_amount'),
-            'total_loss_amount'=>$rows->sum('loss_amount'),
+            'total_buy_amount'=>$total_buy_amount,
+            'total_win_amount'=>$total_win_amount,
+            'total_profit_amount'=>$total_profit_amount<0?$total_profit_amount:'+'.$total_profit_amount,
         ]]);
     }
 
@@ -190,11 +199,13 @@ class LotteryController extends Base
         $image = $request->post('image');
         $name = $request->post('name');
         $wechat = $request->post('wechat');
+        $address = $request->post('address');
         $user = User::find($request->user_id);
         if ($user->user_type != 1) {
             return $this->fail('权限不足');
         }
         UsersShoper::create([
+            'address' => $address,
             'user_id' => $request->user_id,
             'image' => $image,
             'name' => $name,

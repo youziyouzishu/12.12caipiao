@@ -262,6 +262,7 @@ class UserController extends Base
         $image = $request->post('image');
         $name = $request->post('name');
         $wechat = $request->post('wechat');
+        $address = $request->post('address');
 
         $user = User::find($request->user_id);
         if ($user->vip_status != 1) {
@@ -274,8 +275,8 @@ class UserController extends Base
         })->count();
 
 
-        $name = 'admin_config';
-        $config = Option::where('name', $name)->value('value');
+        $configname = 'admin_config';
+        $config = Option::where('name', $configname)->value('value');
         $config = json_decode($config);
         $shop_require = $config->shop_require;
         if ($count < $shop_require) {
@@ -292,6 +293,7 @@ class UserController extends Base
         }
 
         UsersShoper::create([
+            'address' => $address,
             'user_id' => $request->user_id,
             'image' => $image,
             'name' => $name,

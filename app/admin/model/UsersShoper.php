@@ -10,7 +10,7 @@ use plugin\admin\app\model\User;
 
 
 /**
- *
+ * 
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -23,6 +23,8 @@ use plugin\admin\app\model\User;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersShoper newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersShoper newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersShoper query()
+ * @property string $address 地址
+ * @property-read User|null $user
  * @mixin \Eloquent
  */
 class UsersShoper extends Base
@@ -42,7 +44,7 @@ class UsersShoper extends Base
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'user_id', 'image', 'name', 'wechat', 'status'
+        'user_id', 'image', 'name', 'wechat', 'status','address'
     ];
 
     function user()

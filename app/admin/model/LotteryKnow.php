@@ -17,6 +17,7 @@ use plugin\admin\app\model\Base;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LotteryKnow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LotteryKnow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LotteryKnow query()
+ * @property string $image 封面
  * @mixin \Eloquent
  */
 class LotteryKnow extends Base
