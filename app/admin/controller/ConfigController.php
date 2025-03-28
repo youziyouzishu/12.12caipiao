@@ -68,6 +68,9 @@ class ConfigController extends Crud
         $data['law_rule'] = $post['law_rule'] ?? '';
         $data['law_title'] = $post['law_title'] ?? '';
         $data['shop_require'] = $post['shop_require'] ?? '';
+        $data['shop_name'] = $post['shop_name'] ?? '';
+        $data['shop_image'] = $post['shop_image'] ?? '';
+        $data['shop_images'] = $post['shop_images'] ?? '';
 
         $name = 'admin_config';
         Option::where('name', $name)->update([

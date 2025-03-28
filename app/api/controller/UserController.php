@@ -202,7 +202,7 @@ class UserController extends Base
 
         $writer = new PngWriter();
         $qrCode = new QrCode(
-            data: 'https://1212caipiao.62.hzgqapp.com/register/register.html#/?invitecode=' . $user->invitecode,
+            data: 'https://zhying.top/register/register.html#/?invitecode=' . $user->invitecode,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::Low,
             size: 100,

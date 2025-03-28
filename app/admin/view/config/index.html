@@ -5,6 +5,7 @@
     <title></title>
     <link rel="stylesheet" href="/app/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/app/admin/admin/css/reset.css" />
+    <link rel="stylesheet" href="/app/admin/admin/css/muti-upload.css" />
 </head>
 <body class="pear-container">
 <style>
@@ -185,6 +186,45 @@
                             </div>
                         </div>
 
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商店名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="shop_name"  lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">商店封面</label>
+                            <div class="layui-input-block">
+                                <img class="img-4" src=""/>
+                                <input type="text" style="display:none" name="shop_image" value="" />
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="shop_image" permission="app.admin.upload.image">
+                                    <i class="layui-icon layui-icon-upload"></i>上传图片
+                                </button>
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-shop_image" permission="app.admin.upload.attachment">
+                                    <i class="layui-icon layui-icon-align-left"></i>选择图片
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商店轮播图</label>
+                            <div class="layui-input-block">
+                                <div class="layui-upload">
+                                    <input type="text" style="display:none" name="shop_images" value="" id="shop_images"/>
+                                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 500px">
+                                        预览图：
+                                        <div class="layui-upload-list uploader-list" style="overflow: auto;" id="uploader-list">
+                                        </div>
+                                    </blockquote>
+
+                                    <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="multi-upload">
+                                        <i class="layui-icon layui-icon-upload"></i>多图上传
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
 
 
 
@@ -211,7 +251,9 @@
 <script src="/app/admin/component/pear/pear.js"></script>
 <script src="/app/admin/admin/js/permission.js"></script>
 <script>
-
+    //多图上传 start
+    var multiple_images = []; //多图上传array,update也需要将这行放js最前面
+    const UPLOAD_API = "/app/admin/upload/image";
     layui.use(["tinymce"], function() {
         var tinymce = layui.tinymce
         var today_plan = tinymce.render({
@@ -439,7 +481,7 @@
     layui.use(["upload", "layer", "popup"], function() {
         let $ = layui.$;
         let form = layui.form;
-
+        var upload = layui.upload;
         // kefu_qr
         let kefu_qr = $("#kefu_qr").prev();
         kefu_qr.prev().attr("src", kefu_qr.val());
@@ -497,6 +539,91 @@
         });
 
 
+        let shop_image = $("#shop_image").prev();
+        shop_image.prev().attr("src", shop_image.val());
+        layui.$("#attachment-choose-shop_image").on("click", function() {
+            parent.layer.open({
+                type: 2,
+                title: "选择附件",
+                content: "/app/admin/upload/attachment?ext=jpg,jpeg,png,gif,bmp",
+                area: ["95%", "90%"],
+                success: function (layero, index) {
+                    parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                        shop_image.val(data.url).prev().attr("src", data.url);
+                    });
+                }
+            });
+        });
+        layui.upload.render({
+            elem: "#shop_image",
+            url: "/app/admin/upload/image",
+            acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+            done: function (res) {
+                if (res.code) {
+                    return layui.popup.failure(res.msg);
+                }
+                this.item.prev().val(res.data.url).prev().attr("src", res.data.url);
+            }
+        });
+
+
+        upload.render({
+            elem: '#multi-upload',
+            url: "/app/admin/upload/image",
+            acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+            multiple: true,
+            before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            },
+            done: function(res){
+                layer.close(layer.msg());//关闭上传提示窗口
+                //上传完毕
+                $('#uploader-list').append(
+                    '<div class="file-iteme">' +
+                    '<div class="handle"><i class="layui-icon layui-icon-delete"></i></div>' +
+                    '<img src='+ res.data.url +' alt="'+ res.data.name +'" >' +
+                    '</div>'
+                );
+
+                //追加图片成功追加文件名至图片容器
+                multiple_images.push(res.data.url);
+                $('#shop_images').val(multiple_images);
+            }
+        });
+
+        //鼠标悬浮事件
+        $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
+            if(event.type === "mouseenter"){
+                //鼠标悬浮
+                $(this).children(".info").fadeIn("fast");
+                $(this).children(".handle").fadeIn("fast");
+            }else if(event.type === "mouseleave") {
+                //鼠标离开
+                $(this).children(".info").hide();
+                $(this).children(".handle").hide();
+            }
+        });
+
+// 删除图片
+        $(document).on("click", ".file-iteme .handle", function(event){
+            var delImg = $(this).parent().children("img").attr("src")
+            var index = multiple_images.indexOf(delImg);
+            if (index !== -1) {
+                multiple_images.splice(index, 1);
+            }
+            //重新赋值
+            $('#shop_images').val(multiple_images);
+            //删除标签
+            $(this).parent().remove();
+        });
+//多图上传 end
+
+
+
 
 
         // 提交
@@ -533,7 +660,18 @@
                 form.val("config", res.data);
                 $("#kefu_qr").prev().val(res.data.kefu_qr).prev().attr("src", res.data.kefu_qr);
                 $("#poster_image").prev().val(res.data.poster_image).prev().attr("src", res.data.poster_image);
+                $("#shop_image").prev().val(res.data.shop_image).prev().attr("src", res.data.shop_image);
+// 商品详情初始化
 
+                    multiple_images = res.data.shop_images.split(",");
+                    $.each(multiple_images, function(index, value) {
+                        $('#uploader-list').append(
+                            '<div class="file-iteme">' +
+                            '<div class="handle"><i class="layui-icon layui-icon-delete"></i></div>' +
+                            '<img src='+value +' alt="'+ value +'" >' +
+                            '</div>'
+                        );
+                    });
             }
         });
 
