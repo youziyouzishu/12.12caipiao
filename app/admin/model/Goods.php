@@ -2,6 +2,7 @@
 
 namespace app\admin\model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use plugin\admin\app\model\Base;
 
 /**
@@ -24,10 +25,13 @@ use plugin\admin\app\model\Base;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Goods query()
  * @property-read array $tags_text
  * @property int $status 状态:1=上架,2=下架
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \app\admin\model\GoodsOrdersComment> $comment
  * @mixin \Eloquent
  */
 class Goods extends Base
 {
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      *
@@ -50,6 +54,11 @@ class Goods extends Base
     {
         $value = $value ?: $this->tags;
         return explode('|', $value);
+    }
+
+    function comment()
+    {
+        return $this->hasManyThrough(GoodsOrdersComment::class, GoodsOrdersSubs::class, 'goods_id', 'sub_id', 'id', 'id');
     }
 
 

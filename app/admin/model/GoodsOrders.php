@@ -9,7 +9,7 @@ use plugin\admin\app\model\Base;
 use support\Db;
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -34,6 +34,9 @@ use support\Db;
  * @property \Illuminate\Support\Carbon|null $pay_time 支付时间
  * @property \Illuminate\Support\Carbon|null $confirm_time 确认时间
  * @property \Illuminate\Support\Carbon|null $deleted_at 删除时间
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders withoutTrashed()
  * @mixin \Eloquent
  */
 class GoodsOrders extends Base

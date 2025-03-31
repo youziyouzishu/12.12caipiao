@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\admin\model\Goods;
 use app\admin\model\GoodsOrders;
+use app\admin\model\Shopcar;
 use app\admin\model\UsersAddress;
 use app\api\basic\Base;
 use support\Db;
@@ -37,7 +38,8 @@ class GoodsController extends Base
                     $query->orderByDesc('id');
                 }
             })
-            ->paginate()->items();
+            ->paginate()
+            ->items();
         return $this->success('获取成功', $rows);
     }
 
@@ -45,7 +47,38 @@ class GoodsController extends Base
     {
         $id = $request->post('id');
         $row = Goods::find($id);
+        if (!$row) {
+            return $this->fail('商品不存在');
+        }
+        $comment_info = [];
+        $comment_info['list'] = $row->comment()->with(['user','sub'])->orderByDesc('id')->take(2)->get();
+        $comment_info['statistics'] = [
+            'good' => $row->comment()->where('rating', '>=', 4)->count(),
+            'normal' => $row->comment()->where('rating', '>=', 2)->where('rating', '<', 4)->count(),
+            'bad' => $row->comment()->where('rating', '<', 2)->count(),
+            'has_images' => $row->comment()->whereNotNull('images')->count(),
+        ];
+        $row->setAttribute('comment_info',$comment_info);
         return $this->success('获取成功', $row);
+    }
+
+
+    function getCommentList(Request $request)
+    {
+        $id = $request->post('id');
+        $row = Goods::find($id);
+        if (!$row) {
+            return $this->fail('商品不存在');
+        }
+        $comment_info = [];
+        $comment_info['list'] = $row->comment()->with(['user','sub'])->orderByDesc('id')->paginate()->items();
+        $comment_info['statistics'] = [
+            'good' => $row->comment()->where('rating', '>=', 4)->count(),
+            'normal' => $row->comment()->where('rating', '>=', 2)->where('rating', '<', 4)->count(),
+            'bad' => $row->comment()->where('rating', '<', 2)->count(),
+            'has_images' => $row->comment()->whereNotNull('images')->count(),
+        ];
+        return $this->success('请求成功', $comment_info);
     }
 
     /**
@@ -57,10 +90,10 @@ class GoodsController extends Base
     function createOrder(Request $request)
     {
         $address_id = $request->post('address_id');
-        $goods_id = $request->post('goods_id');
+        $id = $request->post('id');
         $num = $request->post('num');
         $mark = $request->post('mark', '');
-        $goods = Goods::find($goods_id);
+        $goods = Goods::find($id);
         if (empty($goods)) {
             return $this->fail('请选择商品');
         }
@@ -85,7 +118,7 @@ class GoodsController extends Base
             ]);
             $order->subs()->createMany([
                 [
-                    'goods_id' => $goods_id,
+                    'goods_id' => $id,
                     'num' => $num,
                     'amount' => $goods->price,
                     'total_amount' => $goods_amount,
@@ -110,9 +143,9 @@ class GoodsController extends Base
      */
     function getPrice(Request $request)
     {
-        $goods_id = $request->post('goods_id');
+        $id = $request->post('id');
         $num = $request->post('num');
-        $goods = Goods::find($goods_id);
+        $goods = Goods::find($id);
         if (empty($goods)) {
             return $this->fail('请选择商品');
         }
@@ -125,6 +158,7 @@ class GoodsController extends Base
             'pay_amount' => $pay_amount,
         ]);
     }
+
 
 
 }

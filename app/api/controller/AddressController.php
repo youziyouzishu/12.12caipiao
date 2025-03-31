@@ -22,8 +22,7 @@ class AddressController extends Base
         $region = $request->post('region');
         $address = $request->post('address');
         $default = $request->post('default', 0);
-        $lat = $request->post('lat');
-        $lng = $request->post('lng');
+
         $data = [
             'user_id' => $request->user_id,
             'name' => $name,
@@ -33,8 +32,6 @@ class AddressController extends Base
             'region' => $region,
             'address' => $address,
             'default' => $default,
-            'lat'=> $lat,
-            'lng'=> $lng,
         ];
 
         if ($data['default'] == 0) {
@@ -56,7 +53,7 @@ class AddressController extends Base
     function setDefault(Request $request)
     {
         $id = $request->post('id');
-        UsersAddress::where(['user_id' => $request->user_id])->update(['default' => 0]);
+        UsersAddress::where(['user_id' => $request->user_id,'default' => 1])->update(['default' => 0]);
         UsersAddress::where(['id' => $id])->update(['default' => 1]);
         return $this->success();
     }

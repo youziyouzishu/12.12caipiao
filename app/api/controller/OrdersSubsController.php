@@ -47,7 +47,6 @@ class OrdersSubsController extends Base
                 'images' => $images,
                 'score' => $score,
                 'content' => $content,
-                'goods_id' => $sub->goods_id,
                 'anonymity' => $anonymity,
             ]);
             $sub->refresh();

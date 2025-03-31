@@ -48,10 +48,10 @@ class ShopcarController extends Base
 
     function update(Request $request)
     {
-        $shopcar_id = $request->post('shopcar_id');
+        $id = $request->post('id');
         $num = $request->post('num');
         $tag = $request->post('tag');
-        $row = Shopcar::find($shopcar_id);
+        $row = Shopcar::find($id);
         if (empty($row)) {
             return $this->fail('购物车不存在');
         }

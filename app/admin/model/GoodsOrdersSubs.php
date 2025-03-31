@@ -9,7 +9,7 @@ use support\Db;
 
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $order_id 订单

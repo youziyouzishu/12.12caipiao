@@ -9,12 +9,11 @@ use support\Db;
 
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $user_id 用户
  * @property int $sub_id 子订单
- * @property int $goods_id 商品
  * @property int $score 评分(1-5)
  * @property string $images 图片
  * @property string $content 内容
@@ -24,7 +23,6 @@ use support\Db;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment query()
- * @property-read \app\admin\model\Goods|null $goods
  * @property-read \app\admin\model\GoodsOrders|null $orders
  * @property-read \app\admin\model\GoodsOrdersSubs|null $sub
  * @property-read \app\admin\model\User|null $user
@@ -51,7 +49,6 @@ class GoodsOrdersComment extends Base
     protected $fillable = [
         'user_id',
         'sub_id',
-        'goods_id',
         'score',
         'images',
         'content',
@@ -68,17 +65,13 @@ class GoodsOrdersComment extends Base
         return $this->belongsTo(GoodsOrdersSubs::class, 'sub_id', 'id');
     }
 
-    function goods()
-    {
-        return $this->belongsTo(Goods::class, 'goods_id', 'id');
-    }
 
     function orders()
     {
         return $this->belongsTo(GoodsOrders::class, 'order_id', 'id');
     }
 
-    
+
 
 
 }
