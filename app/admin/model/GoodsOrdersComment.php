@@ -9,7 +9,7 @@ use support\Db;
 
 
 /**
- *
+ * 
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -31,7 +31,7 @@ use support\Db;
 class GoodsOrdersComment extends Base
 {
 
-
+    use SoftDeletes;
     /**
      * The table associated with the model.
      *

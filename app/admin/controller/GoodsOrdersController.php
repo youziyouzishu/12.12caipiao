@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use Carbon\Carbon;
 use support\Request;
 use support\Response;
 use app\admin\model\GoodsOrders;
@@ -75,6 +76,15 @@ class GoodsOrdersController extends Crud
     public function update(Request $request): Response
     {
         if ($request->method() === 'POST') {
+            $status = $request->post('status');
+            $id = $request->post('id');
+            $order = GoodsOrders::find($id);
+            if ($order->status == 1 && $status == 3){
+                //发货
+                $request->setParams('post',[
+                    'delivery_time'=>Carbon::now()
+                ]);
+            }
             return parent::update($request);
         }
         return view('goods-orders/update');

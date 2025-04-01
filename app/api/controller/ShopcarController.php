@@ -67,8 +67,8 @@ class ShopcarController extends Base
 
     function delete(Request $request)
     {
-        $shopcar_ids = $request->post('shopcar_ids');
-        $rows = Shopcar::whereIn('id', $shopcar_ids)->delete();
+        $ids = $request->post('ids');
+        $rows = Shopcar::whereIn('id', $ids)->delete();
         return $this->success();
     }
 
@@ -80,8 +80,8 @@ class ShopcarController extends Base
      */
     function getPrice(Request $request)
     {
-        $shopcar_ids = $request->post('shopcar_ids');
-        $rows = Shopcar::with(['goods'])->whereIn('id', $shopcar_ids)->get();
+        $ids = $request->post('ids');
+        $rows = Shopcar::with(['goods'])->whereIn('id', $ids)->get();
         $freight = 0;
         $goods_amount = 0;
         foreach ($rows as $row){
@@ -106,7 +106,7 @@ class ShopcarController extends Base
     function createOrder(Request $request)
     {
         $address_id = $request->post('address_id');
-        $shopcar_ids = $request->post('shopcar_ids');
+        $ids = $request->post('ids');
         $mark = $request->post('mark', '');
         $address = UsersAddress::find($address_id);
         if (!$address) {
@@ -115,14 +115,14 @@ class ShopcarController extends Base
 
         Db::connection('plugin.admin.mysql')->beginTransaction();
         try {
-            $rows = Shopcar::where(['user_id'=>$request->user_id])->whereIn('id', $shopcar_ids)->get();
+            $rows = Shopcar::where(['user_id'=>$request->user_id])->whereIn('id', $ids)->get();
             $freight = 0;
             $goods_amount = 0;
             $subs = [];
             foreach ($rows as $row){
                 $freight += $row->goods->freight * $row->num;
                 $goods_amount = $row->goods->price * $row->num;
-                $subs[] = ['goods_id'=>$row->goods_id,'num'=>$row->num,'amount'=>$row->goods->price,'total_amount'=>$goods_amount];
+                $subs[] = ['goods_id'=>$row->goods_id,'num'=>$row->num,'amount'=>$row->goods->price,'total_amount'=>$goods_amount,'tag'=>$row->tag];
                 $row->delete();
             }
             $pay_amount = $goods_amount + $freight;

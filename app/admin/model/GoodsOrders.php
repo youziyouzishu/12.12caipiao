@@ -9,7 +9,7 @@ use plugin\admin\app\model\Base;
 use support\Db;
 
 /**
- *
+ * 
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -37,6 +37,9 @@ use support\Db;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrders withoutTrashed()
+ * @property \Illuminate\Support\Carbon|null $delivery_time 发货时间
+ * @property string|null $express 快递公司
+ * @property string|null $waybill 快递单号
  * @mixin \Eloquent
  */
 class GoodsOrders extends Base
@@ -62,6 +65,9 @@ class GoodsOrders extends Base
         'pay_time' => 'datetime',
         'confirm_time' => 'datetime',
         'deleted_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'delivery_time' => 'datetime',
     ];
 
     protected $fillable = [
@@ -82,7 +88,7 @@ class GoodsOrders extends Base
     {
         $value = $value ? $value : $this->status;
         $list = $this->getStatusList();
-        return $list[$value];
+        return $list[$value]??'';
     }
 
     function getStatusList()

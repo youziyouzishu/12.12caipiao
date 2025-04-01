@@ -4,18 +4,18 @@ namespace app\admin\controller;
 
 use support\Request;
 use support\Response;
-use app\admin\model\GoodsOrdersSubs;
+use app\admin\model\UsersScoreLog;
 use plugin\admin\app\controller\Crud;
 use support\exception\BusinessException;
 
 /**
- * 子订单列表 
+ * 用户账户变动记录 
  */
-class GoodsOrdersSubsController extends Crud
+class UsersScoreLogController extends Crud
 {
     
     /**
-     * @var GoodsOrdersSubs
+     * @var UsersScoreLog
      */
     protected $model = null;
 
@@ -25,7 +25,7 @@ class GoodsOrdersSubsController extends Crud
      */
     public function __construct()
     {
-        $this->model = new GoodsOrdersSubs;
+        $this->model = new UsersScoreLog;
     }
 
     /**
@@ -37,7 +37,7 @@ class GoodsOrdersSubsController extends Crud
     public function select(Request $request): Response
     {
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
-        $query = $this->doSelect($where, $field, $order)->with(['goods']);
+        $query = $this->doSelect($where, $field, $order)->with(['user']);
         return $this->doFormat($query, $format, $limit);
     }
     
@@ -47,7 +47,7 @@ class GoodsOrdersSubsController extends Crud
      */
     public function index(): Response
     {
-        return view('goods-orders-subs/index');
+        return view('users-score-log/index');
     }
 
     /**
@@ -61,7 +61,7 @@ class GoodsOrdersSubsController extends Crud
         if ($request->method() === 'POST') {
             return parent::insert($request);
         }
-        return view('goods-orders-subs/insert');
+        return view('users-score-log/insert');
     }
 
     /**
@@ -75,7 +75,7 @@ class GoodsOrdersSubsController extends Crud
         if ($request->method() === 'POST') {
             return parent::update($request);
         }
-        return view('goods-orders-subs/update');
+        return view('users-score-log/update');
     }
 
 }

@@ -8,6 +8,7 @@ use app\admin\model\User;
 use app\api\basic\Base;
 use app\api\service\Pay;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use support\Db;
 use support\Log;
 use support\Request;
@@ -107,7 +108,7 @@ class OrdersController extends Base
         $order = GoodsOrders::with([
             'address',
             'subs' => function ($query) {
-                $query->with(['goods']);
+                $query->with(['goods','comment']);
             }])->find($id);
         if (!$order) {
             return $this->fail('订单不存在');
@@ -144,6 +145,51 @@ class OrdersController extends Base
         $order->confirm_time = Carbon::now();
         $order->save();
         return $this->success();
+    }
+
+    /**
+     * 查询快递
+     * @param Request $request
+     * @return \support\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    function getExpressQuery(Request $request)
+    {
+        $waybill = $request->post('waybill');
+        // 参数设置
+        $key = 'RytoIHjI5725';                        // 客户授权key
+        $customer = 'FEDC7FB59D03DF9A5B4BE4C66ACBD42D';                   // 查询公司编号
+        $param = [
+            'num' => $waybill
+        ];
+        $post_data = array();
+        $post_data['customer'] = $customer;
+        $post_data['param'] = json_encode($param, JSON_UNESCAPED_UNICODE);
+        $sign = md5($post_data['param'].$key.$post_data['customer']);
+        $post_data['sign'] = strtoupper($sign);
+        $url = 'https://poll.kuaidi100.com/poll/query.do';
+        $client = new Client();
+        $response = $client->post($url, [
+            'form_params' => $post_data,
+        ]);
+        $result = $response->getBody()->getContents();
+        $result = json_decode($result);
+        $result = $result->data;
+        return $this->success('成功',$result);
+    }
+
+    function getTabs(Request $request)
+    {
+        $status1 = GoodsOrders::where(['user_id'=>$request->user_id,'status'=>0])->count();
+        $status2 = GoodsOrders::where(['user_id'=>$request->user_id,'status'=>1])->count();
+        $status3 = GoodsOrders::where(['user_id'=>$request->user_id,'status'=>3])->count();
+        $status4 = GoodsOrders::where(['user_id'=>$request->user_id,'status'=>4])->count();
+        return $this->success('成功',[
+            'status1'=>$status1,
+            'status2'=>$status2,
+            'status3'=>$status3,
+            'status4'=>$status4,
+        ]);
     }
 
 

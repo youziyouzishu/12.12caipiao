@@ -2,11 +2,13 @@
 
 namespace app\api\controller;
 
+use app\admin\model\GoodsOrders;
 use app\admin\model\User;
 use app\admin\model\VipOrders;
 use app\api\basic\Base;
 use Carbon\Carbon;
 use support\Db;
+use support\Log;
 use support\Request;
 use Yansongda\Pay\Pay;
 
@@ -70,6 +72,7 @@ class NotifyController extends Base
                     $transaction_id = $res['transaction_id'];
                     $openid = $res['payer']['openid'] ?? '';
 
+
 //                    $app = new Application(config('wechat'));
 //                    $api = $app->getClient();
 //                    $date = new DateTime(date('Y-m-d H:i:s'), new DateTimeZone('Asia/Shanghai'));
@@ -84,16 +87,19 @@ class NotifyController extends Base
 //                        'upload_time' => $formatted_date,
 //                        'payer' => ['openid' => $openid]
 //                    ]);
+                    $paytype = 1;
                     break;
                 case 'alipay':
                     $pay = Pay::alipay($config);
                     $res = $pay->callback($request->post());
                     $out_trade_no = $res->out_trade_no;
                     $attach = $res->passback_params;
+                    $paytype = 2;
                     break;
                 case 'balance':
                     $out_trade_no = $request->input('out_trade_no');
                     $attach = $request->input('attach');
+                    $paytype = 4;
                     break;
                 default:
                     throw new \Exception('支付类型错误');
@@ -115,6 +121,16 @@ class NotifyController extends Base
                         $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
                     }
                     $order->user->save();
+                    break;
+                case 'goods':
+                    $order = GoodsOrders::where(['ordersn' => $out_trade_no, 'status' => 0])->first();
+                    if (!$order) {
+                        throw new \Exception('订单不存在');
+                    }
+                    $order->status = 1;
+                    $order->pay_time = Carbon::now();
+                    $order->pay_type = $paytype;
+                    $order->save();
                     break;
                 case 'recharge':
                     $order = RechargeOrders::where(['ordersn' => $out_trade_no, 'status' => 0])->first();
@@ -138,6 +154,8 @@ class NotifyController extends Base
             Db::connection('plugin.admin.mysql')->commit();
         } catch (\Throwable $e) {
             Db::connection('plugin.admin.mysql')->rollBack();
+            Log::error('支付回调失败');
+            Log::error($e->getMessage());
             throw new \Exception($e->getMessage());
         }
     }

@@ -26,6 +26,10 @@ use plugin\admin\app\model\Base;
  * @property-read array $tags_text
  * @property int $status 状态:1=上架,2=下架
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \app\admin\model\GoodsOrdersComment> $comment
+ * @property \Illuminate\Support\Carbon|null $deleted_at 删除时间
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Goods onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Goods withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Goods withoutTrashed()
  * @mixin \Eloquent
  */
 class Goods extends Base

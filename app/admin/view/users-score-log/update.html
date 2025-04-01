@@ -14,28 +14,49 @@
 
             <div class="mainBox">
                 <div class="main-container mr-5">
-
+                    
                     <div class="layui-form-item">
-                        <label class="layui-form-label">订单状态</label>
+                        <label class="layui-form-label">用户</label>
                         <div class="layui-input-block">
-                            <div name="status" id="status" value="" ></div>
+                            <input type="number" name="user_id" value="" class="layui-input">
                         </div>
                     </div>
-
-                    <div class="layui-form-item express">
-                        <label class="layui-form-label">快递公司</label>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">变更积分</label>
                         <div class="layui-input-block">
-                            <input type="text" name="express" value="" class="layui-input">
+                            <input type="text" name="score" value="" class="layui-input">
                         </div>
                     </div>
-
-                    <div class="layui-form-item waybill">
-                        <label class="layui-form-label">快递单号</label>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">变更前积分</label>
                         <div class="layui-input-block">
-                            <input type="text" name="waybill" value="" class="layui-input">
+                            <input type="text" name="before" value="" class="layui-input">
                         </div>
                     </div>
-
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">变更后积分</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="after" value="" class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="memo" value="" class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型:money=余额</label>
+                        <div class="layui-input-block">
+                            <div name="type" id="type" value="" ></div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 
@@ -61,8 +82,8 @@
 
             // 相关接口
             const PRIMARY_KEY = "id";
-            const SELECT_API = "/admin/goods-orders/select" + location.search;
-            const UPDATE_API = "/admin/goods-orders/update";
+            const SELECT_API = "/admin/users-score-log/select" + location.search;
+            const UPDATE_API = "/admin/users-score-log/update";
 
             // 获取数据库记录
             layui.use(["form", "util", "popup"], function () {
@@ -87,58 +108,21 @@
                                 obj[0].value = value;
                             }
                         });
-
-                        // 字段 状态:0=待支付,1=待发货,2=取消,3=待收货,4=完成,5=待评价
+                        
+                        // 字段 类型:money=余额 type
                         layui.use(["jquery", "xmSelect"], function() {
-                            let value = layui.$("#status").attr("value");
+                            let value = layui.$("#type").attr("value");
                             let initValue = value ? value.split(",") : [];
-                            let data = [{"value":"0","name":"待支付"},{"value":"1","name":"待发货"},{"value":"2","name":"取消"},{"value":"3","name":"待收货"},{"value":"4","name":"完成"},{"value":"5","name":"待评价"}];
-                            if (value === '0'){
-                                data = [{"value":"0","name":"待支付"}];
-                            }
-                            if (value === '1'){
-                                data = [{"value":"1","name":"待发货"},{"value":"3","name":"发货"}];
-                            }
-                            if (value === '2'){
-                                data = [{"value":"2","name":"取消"}];
-                            }
-                            if (value === '3'){
-                                data = [{"value":"3","name":"待收货"}];
-                            }
-                            if (value === '4'){
-                                data = [{"value":"4","name":"完成"}];
-                            }
-                            if (value === '5'){
-                                data = [{"value":"5","name":"待评价"}];
-                            }
-                            let statusSelect = layui.xmSelect.render({
-                                el: "#status",
-                                name: "status",
+                            layui.xmSelect.render({
+                                el: "#type",
+                                name: "type",
                                 filterable: true,
                                 initValue: initValue,
-                                data: data,
+                                data: [{"value":"money","name":"余额"}],
                                 model: {"icon":"hidden","label":{"type":"text"}},
                                 clickClose: true,
                                 radio: true,
-                                on: function(data){
-                                    //arr:  当前多选已选中的数据
-                                    var arr = data.arr;
-                                    //change, 此次选择变化的数据,数组
-                                    var change = data.change;
-                                    //isAdd, 此次操作是新增还是删除
-                                    var isAdd = data.isAdd;
-                                    if (isAdd && change[0].value === "3"){
-                                        $(".express").removeClass("layui-hide")
-                                        $(".waybill").removeClass("layui-hide")
-                                    }else{
-                                        $(".express").addClass("layui-hide")
-                                        $(".waybill").addClass("layui-hide")
-                                    }
-                                    //可以return一个数组, 代表想选中的数据
-                                    //return []
-                                },
                             })
-                            statusSelect.setValue(initValue,false,true);
                         });
                         
                         

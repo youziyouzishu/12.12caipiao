@@ -53,9 +53,10 @@ class GoodsController extends Base
         $comment_info = [];
         $comment_info['list'] = $row->comment()->with(['user','sub'])->orderByDesc('id')->take(2)->get();
         $comment_info['statistics'] = [
-            'good' => $row->comment()->where('rating', '>=', 4)->count(),
-            'normal' => $row->comment()->where('rating', '>=', 2)->where('rating', '<', 4)->count(),
-            'bad' => $row->comment()->where('rating', '<', 2)->count(),
+            'all' => $row->comment()->count(),
+            'good' => $row->comment()->where('score', '>=', 4)->count(),
+            'normal' => $row->comment()->where('score', '>=', 2)->where('score', '<', 4)->count(),
+            'bad' => $row->comment()->where('score', '<', 2)->count(),
             'has_images' => $row->comment()->whereNotNull('images')->count(),
         ];
         $row->setAttribute('comment_info',$comment_info);
@@ -73,9 +74,10 @@ class GoodsController extends Base
         $comment_info = [];
         $comment_info['list'] = $row->comment()->with(['user','sub'])->orderByDesc('id')->paginate()->items();
         $comment_info['statistics'] = [
-            'good' => $row->comment()->where('rating', '>=', 4)->count(),
-            'normal' => $row->comment()->where('rating', '>=', 2)->where('rating', '<', 4)->count(),
-            'bad' => $row->comment()->where('rating', '<', 2)->count(),
+            'all' => $row->comment()->count(),
+            'good' => $row->comment()->where('score', '>=', 4)->count(),
+            'normal' => $row->comment()->where('score', '>=', 2)->where('score', '<', 4)->count(),
+            'bad' => $row->comment()->where('score', '<', 2)->count(),
             'has_images' => $row->comment()->whereNotNull('images')->count(),
         ];
         return $this->success('请求成功', $comment_info);
@@ -92,6 +94,7 @@ class GoodsController extends Base
         $address_id = $request->post('address_id');
         $id = $request->post('id');
         $num = $request->post('num');
+        $tag = $request->post('tag');
         $mark = $request->post('mark', '');
         $goods = Goods::find($id);
         if (empty($goods)) {
@@ -115,12 +118,14 @@ class GoodsController extends Base
                 'goods_amount' => $goods_amount,
                 'freight' => $freight,
                 'mark' => $mark,
+                'status' => 0,
             ]);
             $order->subs()->createMany([
                 [
                     'goods_id' => $id,
                     'num' => $num,
                     'amount' => $goods->price,
+                    'tag' => $tag,
                     'total_amount' => $goods_amount,
                 ]
             ]);

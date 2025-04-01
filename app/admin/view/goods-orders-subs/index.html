@@ -67,10 +67,10 @@
         <script src="/app/admin/admin/js/common.js"></script>
         
         <script>
-
+            let order_id = layui.url().search['order_id'];
             // 相关常量
             const PRIMARY_KEY = "id";
-            const SELECT_API = "/admin/goods-orders-subs/select";
+            const SELECT_API = "/admin/goods-orders-subs/select?order_id="+order_id;
             const UPDATE_API = "/admin/goods-orders-subs/update";
             const DELETE_API = "/admin/goods-orders-subs/delete";
             const INSERT_URL = "/admin/goods-orders-subs/insert";
@@ -101,11 +101,11 @@
 						title: "主键",align: "center",
 						field: "id",
 					},{
-						title: "订单",align: "center",
-						field: "order_id",
-					},{
 						title: "商品",align: "center",
 						field: "goods_id",
+                        templet: function(d) {
+                            return d.goods?d.goods.name:"";
+                        }
 					},{
 						title: "规格",align: "center",
 						field: "tag",

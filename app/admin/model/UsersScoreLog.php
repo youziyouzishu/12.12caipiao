@@ -10,7 +10,7 @@ use plugin\admin\app\model\User;
 
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $user_id 会员ID
