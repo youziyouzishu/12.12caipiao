@@ -121,12 +121,14 @@ class ShopcarController extends Base
             $subs = [];
             foreach ($rows as $row){
                 $freight += $row->goods->freight * $row->num;
-                $goods_amount = $row->goods->price * $row->num;
+                $total_amount = $row->goods->price * $row->num;
+                $goods_amount += $total_amount;
                 $subs[] = ['goods_id'=>$row->goods_id,'num'=>$row->num,'amount'=>$row->goods->price,'total_amount'=>$goods_amount,'tag'=>$row->tag];
                 $row->delete();
             }
             $pay_amount = $goods_amount + $freight;
 
+            
             $order = GoodsOrders::create([
                 'user_id' => $request->user_id,
                 'address_id' => $address->id,
@@ -136,6 +138,8 @@ class ShopcarController extends Base
                 'freight' => $freight,
                 'mark' => $mark,
             ]);
+
+
             $order->subs()->createMany($subs);
             Client::send('job', ['order_id' => $order->id, 'event' => 'order_expire'], 60*15);
             Db::connection('plugin.admin.mysql')->commit();

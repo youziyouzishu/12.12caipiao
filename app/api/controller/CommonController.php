@@ -6,6 +6,7 @@ use app\admin\model\Banner;
 use app\api\basic\Base;
 use plugin\admin\app\model\Option;
 use support\Request;
+use support\Response;
 
 class CommonController extends Base
 {
@@ -28,6 +29,23 @@ class CommonController extends Base
         return $this->success('成功', $config);
     }
 
+
+    function getPrivacyPolicy(Request $request)
+    {
+        $name = 'admin_config';
+        $config = Option::where('name', $name)->value('value');
+        $config = json_decode($config);
+
+        return response($config->privacy_policy);
+    }
+
+    function getUserAgreement(Request $request)
+    {
+        $name = 'admin_config';
+        $config = Option::where('name', $name)->value('value');
+        $config = json_decode($config);
+        return response($config->user_agreement);
+    }
 
 
 }

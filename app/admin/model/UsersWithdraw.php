@@ -10,7 +10,7 @@ use plugin\admin\app\model\User;
 
 
 /**
- * 
+ *
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -52,4 +52,9 @@ class UsersWithdraw extends Base
         'status',
         'reason',
     ];
+
+    function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
