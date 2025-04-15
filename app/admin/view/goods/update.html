@@ -62,7 +62,7 @@
                         <label class="layui-form-label">轮播图</label>
                         <div class="layui-input-block">
                             <div class="layui-upload">
-                                <input type="text" style="display:none" name="images" value="" id="images"/>
+                                <input type="text" class="uploader-list" style="display:none" name="images" value="" id="images"/>
                                 <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
                                     预览图：
                                     <div class="layui-upload-list uploader-list" style="overflow: auto;" id="uploader-list">
@@ -89,6 +89,13 @@
                         <label class="layui-form-label required">规格</label>
                         <div class="layui-input-block">
                             <input type="text" name="tags" value="" required lay-verify="required" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <div name="status" id="status" value="" ></div>
                         </div>
                     </div>
                     
@@ -119,7 +126,7 @@
             const PRIMARY_KEY = "id";
             const SELECT_API = "/admin/goods/select" + location.search;
             const UPDATE_API = "/admin/goods/update";
-            var multiple_images = []; //多图上传
+
             // 获取数据库记录
             layui.use(["form", "util", "popup"], function () {
                 let $ = layui.$;
@@ -131,6 +138,7 @@
                         // 给表单初始化数据
                         layui.each(res.data[0], function (key, value) {
                             let obj = $('*[name="'+key+'"]');
+
                             if (key === "password") {
                                 obj.attr("placeholder", "不更新密码请留空");
                                 return;
@@ -143,9 +151,9 @@
                                 obj[0].value = value;
                             }
 
-                            // 商品详情初始化
-                            if (key === "images" && value != ""){
-                                multiple_images = value.split(",");
+                            // 多图渲染
+                            if (obj[0].classList.contains('uploader-list')) {
+                                let multiple_images = value.split(",");
                                 $.each(multiple_images, function(index, value) {
                                     $('#uploader-list').append(
                                         '<div class="file-iteme">' +
@@ -190,6 +198,7 @@
                         layui.use(["upload", "layer"], function() {
                             var upload = layui.upload;
                             var $ = layui.$;
+                            var multiple_images = []; //多图上传
                             upload.render({
                                 elem: '#multi-upload',
                                 acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
@@ -217,6 +226,32 @@
                                     $('#images').val(multiple_images);
                                 }
                             });
+
+                            //鼠标悬浮事件
+                            $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
+                                if(event.type === "mouseenter"){
+                                    //鼠标悬浮
+                                    $(this).children(".info").fadeIn("fast");
+                                    $(this).children(".handle").fadeIn("fast");
+                                }else if(event.type === "mouseleave") {
+                                    //鼠标离开
+                                    $(this).children(".info").hide();
+                                    $(this).children(".handle").hide();
+                                }
+                            });
+
+// 删除图片
+                            $(document).on("click", ".file-iteme .handle", function(event){
+                                var delImg = $(this).parent().children("img").attr("src")
+                                var index = multiple_images.indexOf(delImg);
+                                if (index !== -1) {
+                                    multiple_images.splice(index, 1);
+                                }
+                                //重新赋值
+                                $('#images').val(multiple_images);
+                                //删除标签
+                                $(this).parent().remove();
+                            });
                         });
                         
                         // 字段 详情 content
@@ -230,6 +265,40 @@
                             edit.on("blur", function(){
                                 layui.$("#content").val(edit.getContent());
                             });
+                        });
+
+                        // 字段 状态:1=上架,2=下架
+                        layui.use(["jquery", "xmSelect"], function() {
+                            let value = layui.$("#status").attr("value");
+                            let initValue = value ? value.split(",") : [];
+                            let statusSelect = layui.xmSelect.render({
+                                el: "#status",
+                                name: "status",
+                                filterable: true,
+                                initValue: initValue,
+                                data : [{"value":"1","name":"上架"},{"value":"2","name":"下架"}],
+                                model: {"icon":"hidden","label":{"type":"text"}},
+                                clickClose: true,
+                                radio: true,
+                                on: function(data){
+                                    //arr:  当前多选已选中的数据
+                                    var arr = data.arr;
+                                    //change, 此次选择变化的数据,数组
+                                    var change = data.change;
+                                    //isAdd, 此次操作是新增还是删除
+                                    var isAdd = data.isAdd;
+                                    if (isAdd && change[0].value === "3"){
+                                        $(".express").removeClass("layui-hide")
+                                        $(".waybill").removeClass("layui-hide")
+                                    }else{
+                                        $(".express").addClass("layui-hide")
+                                        $(".waybill").addClass("layui-hide")
+                                    }
+                                    //可以return一个数组, 代表想选中的数据
+                                    //return []
+                                },
+                            })
+                            statusSelect.setValue(initValue,false,true);
                         });
                         
                         

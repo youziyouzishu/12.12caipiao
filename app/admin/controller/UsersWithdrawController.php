@@ -80,6 +80,10 @@ class UsersWithdrawController extends Crud
             if (!$row) {
                 return $this->fail('记录不存在');
             }
+            if ($row->status == 0 && $status == 1) {
+                //转账
+                User::score($row->withdraw_amount, $row->user_id, '提现驳回', 'money');
+            }
             if ($row->status == 0 && $status == 2) {
                 //驳回 返回余额
                 User::score($row->withdraw_amount, $row->user_id, '提现驳回', 'money');

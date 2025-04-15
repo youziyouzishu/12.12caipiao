@@ -116,7 +116,6 @@
 
             // 相关接口
             const INSERT_API = "/admin/goods/insert";
-            var multiple_images = []
             // 字段 商品封面 image
             layui.use(["upload", "layer"], function() {
                 let input = layui.$("#image").prev();
@@ -150,6 +149,7 @@
             layui.use(["upload", "layer"], function() {
                 var upload = layui.upload;
                 var $ = layui.$;
+                var multiple_images = []
                 upload.render({
                     elem: '#multi-upload',
                     url: "/app/admin/upload/image",
@@ -199,7 +199,7 @@
                         multiple_images.splice(index, 1);
                     }
                     //重新赋值
-                    $('#details').val(multiple_images);
+                    $('#images').val(multiple_images);
                     //删除标签
                     $(this).parent().remove();
                 });
