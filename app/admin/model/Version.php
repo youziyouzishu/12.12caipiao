@@ -29,6 +29,51 @@ class Version extends Base
      * @var string
      */
     protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'url',
+        'version',
+        'type',
+        'must',
+        'remark',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $appends = [
+        'type_text',
+        'must_text',
+    ];
+
+    function getTypeTextAttribute($value)
+    {
+        $value = $value ? $value : $this->type;
+        $list = $this->getTypeList();
+        return $list[$value]??'';
+    }
+
+    function getTypeList()
+    {
+        return [
+            1=>'全量更新',
+            2=>'增量更新'
+        ];
+    }
+
+    function getMustTextAttribute($value)
+    {
+        $value = $value ? $value : $this->must;
+        $list = $this->getMustList();
+        return $list[$value]??'';
+    }
+
+    function getMustList()
+    {
+        return [
+            0=>'否',
+            1=>'是'
+        ];
+    }
     
     
     
