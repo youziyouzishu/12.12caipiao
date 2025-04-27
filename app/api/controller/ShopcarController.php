@@ -141,7 +141,7 @@ class ShopcarController extends Base
 
 
             $order->subs()->createMany($subs);
-            Client::send('job', ['order_id' => $order->id, 'event' => 'order_expire'], 60*15);
+            Client::send('job', ['id' => $order->id, 'event' => 'order_expire'], 60*15);
             Db::connection('plugin.admin.mysql')->commit();
         } catch (\Throwable $e) {
             Db::connection('plugin.admin.mysql')->rollBack();

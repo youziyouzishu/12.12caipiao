@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use app\admin\model\Banner;
+use app\admin\model\Version;
 use app\api\basic\Base;
 use plugin\admin\app\model\Option;
 use support\Request;
@@ -46,6 +47,13 @@ class CommonController extends Base
         $config = json_decode($config);
         return response($config->user_agreement);
     }
+
+    function getVersion()
+    {
+        $version = Version::latest()->first();
+        return $this->success('获取成功',$version);
+    }
+
 
 
 }

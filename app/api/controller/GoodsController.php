@@ -129,7 +129,7 @@ class GoodsController extends Base
                     'total_amount' => $goods_amount,
                 ]
             ]);
-            Client::send('job', ['order_id' => $order->id, 'event' => 'order_expire'], 60 * 15);
+            Client::send('job', ['id' => $order->id, 'event' => 'order_expire'], 60 * 15);
             Db::connection('plugin.admin.mysql')->commit();
         } catch (\Throwable $e) {
             Db::connection('plugin.admin.mysql')->rollBack();
