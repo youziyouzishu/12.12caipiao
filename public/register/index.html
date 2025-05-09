@@ -277,15 +277,7 @@
 				return obj
 			},
 			toUp(type) {
-				let ua = navigator.userAgent.toLowerCase()
-				if (ua.indexOf('micromessenger') !== -1) {
-					this.$message.warning('请在浏览器中打开下载链接')
-					window.location.href = 'http://mp.weixin.qq.com/mp/redirect?url=https://zhying.top/12.12.apk'
-				} else {
-					window.location.href = type === 1 ?
-							"https://itunes.apple.com/cn/app/id6445859315?mt=8" :
-							"https://zhying.top/12.12.apk"
-				}
+				window.location.href = 'https://zhying.top/register/download.html'
 			},
 			startCountdown() {
 				this.showCode = false
