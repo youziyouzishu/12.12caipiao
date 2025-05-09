@@ -38,8 +38,7 @@ class GoodsController extends Base
                     $query->orderByDesc('id');
                 }
             })
-            ->paginate()
-            ->items();
+            ->get();
         return $this->success('获取成功', $rows);
     }
 

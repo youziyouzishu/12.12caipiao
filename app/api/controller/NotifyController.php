@@ -139,6 +139,14 @@ class NotifyController extends Base
                     $order->pay_time = Carbon::now();
                     $order->pay_type = $paytype;
                     $order->save();
+
+                    //增加用户会员时间
+                    if ($order->user->vip_expire_time->isPast()) {
+                        $order->user->vip_expire_time = $order->pay_time->addMonths(1);
+                    } else {
+                        $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
+                    }
+                    $order->user->save();
                     break;
                 case 'recharge':
                     $order = RechargeOrders::where(['ordersn' => $out_trade_no, 'status' => 0])->first();

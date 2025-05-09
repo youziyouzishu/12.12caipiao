@@ -26,7 +26,7 @@ class CommonController extends Base
         $name = 'admin_config';
         $config = Option::where('name', $name)->value('value');
         $config = json_decode($config);
-        $config->switch = false;
+        $config->switch = true;
         return $this->success('成功', $config);
     }
 
