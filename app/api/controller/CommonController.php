@@ -3,6 +3,7 @@
 namespace app\api\controller;
 
 use app\admin\model\Banner;
+use app\admin\model\Shop;
 use app\admin\model\Version;
 use app\api\basic\Base;
 use plugin\admin\app\model\Option;
@@ -52,6 +53,12 @@ class CommonController extends Base
     {
         $version = Version::latest()->first();
         return $this->success('获取成功',$version);
+    }
+
+    function getShopList(Request $request)
+    {
+        $rows = Shop::latest()->get();
+        return $this->success('获取成功',$rows);
     }
 
 
