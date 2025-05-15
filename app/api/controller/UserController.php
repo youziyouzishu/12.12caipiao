@@ -253,6 +253,19 @@ class UserController extends Base
             'week_indirect' => $week_indirect,
             'month_direct' => $month_direct,
             'month_indirect' => $month_indirect,
+            'vip_direct' => UsersLayer::whereHas('user',function ($query){
+                $query->where('vip_expire_time', '>', Carbon::now());
+            })->where('parent_id', $user->id)->where('layer', 1)->count(),
+            'vip_indirect' => UsersLayer::whereHas('user',function ($query){
+                $query->where('vip_expire_time', '>', Carbon::now());
+            })->where('parent_id', $user->id)->where('layer', '>', 1)->count(),
+
+            'no_vip_direct' => UsersLayer::whereHas('user',function ($query){
+                $query->where('vip_expire_time', '<', Carbon::now());
+            })->where('parent_id', $user->id)->where('layer', 1)->count(),
+            'no_vip_indirect' => UsersLayer::whereHas('user',function ($query){
+                $query->where('vip_expire_time', '<', Carbon::now());
+            })->where('parent_id', $user->id)->where('layer', '>', 1)->count(),
         ]);
     }
 

@@ -147,6 +147,14 @@ class NotifyController extends Base
                         $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
                     }
                     $order->user->save();
+                    if ($order->user->parent){
+                        User::score(100, $order->user->parent->id, '推荐返佣', 'money');
+
+                        if ($order->user->parent->parent){
+                            User::score(100, $order->user->parent->parent->id, '推荐返佣', 'money');
+                        }
+                    }
+
                     break;
                 case 'recharge':
                     $order = RechargeOrders::where(['ordersn' => $out_trade_no, 'status' => 0])->first();
