@@ -10,7 +10,7 @@ use plugin\admin\app\model\User;
 
 
 /**
- *
+ * 
  *
  * @property int $id 主键
  * @property int $user_id 用户
@@ -25,6 +25,7 @@ use plugin\admin\app\model\User;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw query()
+ * @property-read User|null $user
  * @mixin \Eloquent
  */
 class UsersWithdraw extends Base

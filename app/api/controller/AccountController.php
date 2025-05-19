@@ -82,7 +82,6 @@ class AccountController extends Base
             'username' => $mobile,
             'mobile' => $mobile,
             'password' => Util::passwordHash($password),
-            'vip_expire_time' => Carbon::now()->addDays(2)->toDateTimeString(),
             'parent_id' => isset($parent) ? $parent->id : 0,
             'invitecode' => User::generateInvitecode(),
         ]);

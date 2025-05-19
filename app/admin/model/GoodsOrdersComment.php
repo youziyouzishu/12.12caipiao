@@ -26,6 +26,10 @@ use support\Db;
  * @property-read \app\admin\model\GoodsOrders|null $orders
  * @property-read \app\admin\model\GoodsOrdersSubs|null $sub
  * @property-read \app\admin\model\User|null $user
+ * @property \Illuminate\Support\Carbon|null $deleted_at 删除时间
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|GoodsOrdersComment withoutTrashed()
  * @mixin \Eloquent
  */
 class GoodsOrdersComment extends Base

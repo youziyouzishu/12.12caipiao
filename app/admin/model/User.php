@@ -44,6 +44,7 @@ use support\Db;
  * @property-read mixed $vip_status 会员类型:0=普通用户,1=正式会员,2=体验会员
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $children
  * @property-read User|null $parent
+ * @property \Illuminate\Support\Carbon|null $first_buy_time 第一次购买商品时间
  * @mixin \Eloquent
  */
 class User extends Base
@@ -87,14 +88,16 @@ class User extends Base
         'user_type',
         'parent_id',
         'invitecode',
-        'openid'
+        'openid',
+        'first_buy_time',
     ];
 
     protected $casts = [
         'vip_expire_time' => 'datetime',
+        'first_buy_time' => 'datetime',
     ];
 
-    protected $appends = ['is_shoper','vip_status'];
+    protected $appends = ['is_shoper', 'vip_status'];
 
 
     /**
@@ -155,12 +158,14 @@ class User extends Base
 
     function getIsShoperAttribute($value)
     {
-        return $this->shoper()->where('status',1)->exists();
+        return $this->shoper()->where('status', 1)->exists();
     }
 
     function getVipStatusAttribute($value)
     {
-        if ($this->vip_expire_time->isPast()) {
+        if (empty($this->vip_expire_time)) {
+            $vip_status = 0;
+        } elseif ($this->vip_expire_time->isPast()) {
             $vip_status = 0;
         } else {
             $order = $this->vipOrders()->where(['status' => 1])->exists();
@@ -172,8 +177,6 @@ class User extends Base
         }
         return $vip_status;
     }
-
-
 
 
 }

@@ -5,6 +5,8 @@ namespace app\admin\model;
 use plugin\admin\app\model\Base;
 
 /**
+ * 
+ *
  * @property integer $id 主键(主键)
  * @property string $url 下载地址
  * @property string $version 版本号
@@ -13,6 +15,12 @@ use plugin\admin\app\model\Base;
  * @property string $remark 更新说明
  * @property string $created_at 创建时间
  * @property string $updated_at 更新时间
+ * @property-read mixed $must_text
+ * @property-read mixed $type_text
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Version newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Version newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Version query()
+ * @mixin \Eloquent
  */
 class Version extends Base
 {

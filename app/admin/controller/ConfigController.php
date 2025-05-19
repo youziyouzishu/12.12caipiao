@@ -71,6 +71,8 @@ class ConfigController extends Crud
         $data['shop_name'] = $post['shop_name'] ?? '';
         $data['shop_image'] = $post['shop_image'] ?? '';
         $data['shop_images'] = $post['shop_images'] ?? '';
+        $data['layer2'] = $post['layer2'] ?? '';
+        $data['layer1'] = $post['layer1'] ?? '';
 
         $name = 'admin_config';
         Option::where('name', $name)->update([

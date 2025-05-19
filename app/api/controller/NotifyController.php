@@ -7,6 +7,7 @@ use app\admin\model\User;
 use app\admin\model\VipOrders;
 use app\api\basic\Base;
 use Carbon\Carbon;
+use plugin\admin\app\model\Option;
 use support\Db;
 use support\Log;
 use support\Request;
@@ -67,7 +68,7 @@ class NotifyController extends Base
                     $res = $res->resource;
                     $res = $res['ciphertext'];
                     $trade_state = $res['trade_state'];
-                    if ($trade_state !== 'SUCCESS'){
+                    if ($trade_state !== 'SUCCESS') {
                         throw new \Exception('支付失败');
                     }
                     $out_trade_no = $res['out_trade_no'];
@@ -97,7 +98,7 @@ class NotifyController extends Base
                     $pay = Pay::alipay($config);
                     $res = $pay->callback($request->post());
                     $trade_status = $res->trade_status;
-                    if ($trade_status !== 'TRADE_SUCCESS'){
+                    if ($trade_status !== 'TRADE_SUCCESS') {
                         throw new \Exception('支付失败');
                     }
                     $out_trade_no = $res->out_trade_no;
@@ -124,7 +125,7 @@ class NotifyController extends Base
                     $order->save();
                     //增加用户会员时间
                     if ($order->user->vip_expire_time->isPast()) {
-                        $order->user->vip_expire_time =$order->pay_time->addMonths(1);
+                        $order->user->vip_expire_time = $order->pay_time->addMonths(1);
                     } else {
                         $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
                     }
@@ -141,20 +142,26 @@ class NotifyController extends Base
                     $order->save();
 
                     //增加用户会员时间
-                    if ($order->user->vip_expire_time->isPast()) {
+                    if (empty($order->user->vip_expire_time)) {
+                        $order->user->first_buy_time = $order->pay_time;
+                        $order->user->vip_expire_time = $order->pay_time->addMonths(1);
+                    } elseif ($order->user->vip_expire_time->isPast()) {
                         $order->user->vip_expire_time = $order->pay_time->addMonths(1);
                     } else {
                         $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
                     }
                     $order->user->save();
-                    if ($order->user->parent){
-                        User::score(100, $order->user->parent->id, '推荐返佣', 'money');
-
-                        if ($order->user->parent->parent){
-                            User::score(100, $order->user->parent->parent->id, '推荐返佣', 'money');
+                    if ($order->user->parent) {
+                        $name = 'admin_config';
+                        $config = Option::where('name', $name)->value('value');
+                        $config = json_decode($config);
+                        $layer1_amount = $order->pay_amount * $config->layer1 / 100;
+                        User::score($layer1_amount, $order->user->parent->id, '推荐返佣', 'money');
+                        if ($order->user->parent->parent) {
+                            $layer2_amount = $order->pay_amount * $config->layer2 / 100;
+                            User::score($layer2_amount, $order->user->parent->parent->id, '推荐返佣', 'money');
                         }
                     }
-
                     break;
                 case 'recharge':
                     $order = RechargeOrders::where(['ordersn' => $out_trade_no, 'status' => 0])->first();

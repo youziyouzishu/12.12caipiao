@@ -17,29 +17,9 @@ class IndexController extends Base
     public function index(Request $request)
     {
 
-        $order = GoodsOrders::where(['ordersn' => '20250515682580FFDB8D7', 'status' => 0])->first();
-        if (!$order) {
-            throw new \Exception('订单不存在');
-        }
-        $order->status = 1;
-        $order->pay_time = Carbon::now();
-        $order->pay_type = 4;
-        $order->save();
+        $user = User::find(1);
 
-        //增加用户会员时间
-        if ($order->user->vip_expire_time->isPast()) {
-            $order->user->vip_expire_time = $order->pay_time->addMonths(1);
-        } else {
-            $order->user->vip_expire_time = $order->user->vip_expire_time->addMonths(1);
-        }
-        $order->user->save();
-        if ($order->user->parent){
-            User::score(100, $order->user->parent->id, '推荐返佣', 'money');
-
-
-        }
-
-        return $this->success();
+        return $this->success('成功',$user);
     }
 
 }
