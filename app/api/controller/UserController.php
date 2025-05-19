@@ -39,8 +39,8 @@ class UserController extends Base
         }
         $user = User::find($request->user_id);
         if ($user->first_buy_time && $user->vip_status == 1){
-            $days = $user->first_buy_time->diffInDays(Carbon::now());
-            $next_days = $user->first_buy_time->diffInDays($user->vip_expire_time);
+            $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
+            $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
             $text = "尊敬的会员，今天是您第{$days}个幸运日离下个幸运日还有{$next_days}天";
         }else{
             $text = '';
@@ -230,50 +230,20 @@ class UserController extends Base
     function getTeamList(Request $request)
     {
         $user = User::find($request->user_id);
-        $today = Carbon::today();
-        // 本周直推人数
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        // 本月直推人数
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+        $team_count = UsersLayer::where('parent_id',$user->id)->where('layer','<=',2)->count();#团队人数
+        $team_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer','<=',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#团队会员数
+        $direct_count = UsersLayer::where('parent_id',$user->id)->where('layer',1)->count();#直推人数
+        $direct_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer',1)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#直推会员数
+        $other_count = UsersLayer::where('parent_id',$user->id)->where('layer',2)->count();#间推人数
+        $other_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#间推会员数
 
-        $total_direct = UsersLayer::where('parent_id', $user->id)->where('layer', 1)->count();#直推总人数
-        $total_indirect = UsersLayer::where('parent_id', $user->id)->where('layer', '>', 1)->count();#间推总人数
-
-
-        $today_direct = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer', 1)->count();
-        $today_indirect = UsersLayer::where('parent_id', $user->id)->whereDate('created_at', $today)->where('layer', '>', 1)->count();
-
-        $week_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer', 1)->count();
-        $week_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->where('layer', '>', 1)->count();
-
-        $month_direct = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer', 1)->count();
-        $month_indirect = UsersLayer::where('parent_id', $user->id)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->where('layer', '>', 1)->count();
-
-        return $this->success('获取成功', [
-            'total_team' => $total_direct + $total_direct,
-            'total_direct' => $total_direct,
-            'total_indirect' => $total_indirect,
-            'today_direct' => $today_direct,
-            'today_indirect' => $today_indirect,
-            'week_direct' => $week_direct,
-            'week_indirect' => $week_indirect,
-            'month_direct' => $month_direct,
-            'month_indirect' => $month_indirect,
-            'vip_direct' => UsersLayer::whereHas('user',function ($query){
-                $query->where('vip_expire_time', '>', Carbon::now());
-            })->where('parent_id', $user->id)->where('layer', 1)->count(),
-            'vip_indirect' => UsersLayer::whereHas('user',function ($query){
-                $query->where('vip_expire_time', '>', Carbon::now());
-            })->where('parent_id', $user->id)->where('layer', '>', 1)->count(),
-
-            'no_vip_direct' => UsersLayer::whereHas('user',function ($query){
-                $query->where('vip_expire_time', '<', Carbon::now());
-            })->where('parent_id', $user->id)->where('layer', 1)->count(),
-            'no_vip_indirect' => UsersLayer::whereHas('user',function ($query){
-                $query->where('vip_expire_time', '<', Carbon::now());
-            })->where('parent_id', $user->id)->where('layer', '>', 1)->count(),
+        return $this->success('获取成功',[
+            'team_count' => $team_count,
+            'team_vip_count' => $team_vip_count,
+            'direct_count' => $direct_count,
+            'direct_vip_count' => $direct_vip_count,
+            'other_count' => $other_count,
+            'other_vip_count' => $other_vip_count,
         ]);
     }
 

@@ -168,12 +168,8 @@ class User extends Base
         } elseif ($this->vip_expire_time->isPast()) {
             $vip_status = 0;
         } else {
-            $order = $this->vipOrders()->where(['status' => 1])->exists();
-            if ($order) {
-                $vip_status = 1;
-            } else {
-                $vip_status = 2;
-            }
+            $vip_status = 1;
+
         }
         return $vip_status;
     }
