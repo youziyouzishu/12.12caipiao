@@ -200,6 +200,7 @@ class UserController extends Base
         $user = User::find($request->user_id);
         $user->openid = $response->getId();
         $user->save();
+
         return $this->success('绑定成功');
     }
 
