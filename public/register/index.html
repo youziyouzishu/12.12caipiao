@@ -161,8 +161,6 @@
 </body>
 <script type="text/javascript">
 	const host = 'https://zhying.top'
-	let getPid = window.location.href.split('?pid=')
-
 	function validatePassword(rule, value, callback) {
 		if (value !== this.form.password) {
 			callback(new Error('两次输入密码不一致'))
@@ -170,7 +168,6 @@
 			callback()
 		}
 	}
-
 	function validatorPhone(rule, value, callback) {
 		if (value === '') {
 			callback(new Error('手机号不能为空'))

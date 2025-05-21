@@ -41,7 +41,7 @@ class UserController extends Base
         if ($user->first_buy_time && $user->vip_status == 1){
             $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
             $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
-            $text = "尊敬的会员，今天是您第{$days}个幸运日离下个幸运日还有{$next_days}天";
+            $text = "尊敬的会员，今天是您第{$days}个幸运日，离下个幸运月还有{$next_days}天";
         }else{
             $text = '';
         }
