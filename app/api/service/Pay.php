@@ -2,9 +2,11 @@
 
 namespace app\api\service;
 
-use support\exception\BusinessException;
-use Yansongda\Artful\Rocket;
-use Yansongda\Supports\Collection;
+
+use Yansongda\Artful\Exception\ContainerException;
+use Yansongda\Artful\Exception\InvalidParamsException;
+use Yansongda\Artful\Exception\InvalidResponseException;
+use Yansongda\Pay\Plugin\Wechat\V3\Marketing\Transfer\Receipt\CreatePlugin;
 
 class Pay
 {
@@ -40,7 +42,7 @@ class Pay
             ])->getBody()->getContents();
         } elseif ($pay_type == 3) {
             throw new \Exception('暂不支持数字人民币');
-        }else{
+        } else {
             throw new \Exception('支付类型错误');
         }
         return $result;
@@ -63,5 +65,34 @@ class Pay
             ]),
             default => throw new \Exception('支付类型错误'),
         };
+    }
+
+    public static function transfer($pay_amount, $order_no, $openid, $mark)
+    {
+        \Yansongda\Pay\Pay::config(config('payment'));
+
+        $params = [
+            'transfer_scene_id' => '1000',
+            'out_bill_no' => $order_no,
+            'openid' => $openid,
+            'transfer_amount' => (int)bcmul($pay_amount, 100, 2),
+            'transfer_remark' => $mark,
+            'transfer_scene_report_infos' => [
+                [
+                    'info_type' => '活动名称',
+                    'info_content' => '新会员有礼'
+                ],
+                [
+                    'info_type' => '奖励说明',
+                    'info_content' => '注册会员抽奖一等奖'
+                ],
+            ],
+            '_type' => 'app'
+        ];
+        $allPlugins = \Yansongda\Pay\Pay::wechat()->mergeCommonPlugins([\Yansongda\Pay\Plugin\Wechat\V3\Marketing\MchTransfer\CreatePlugin::class]);
+
+        $result = \Yansongda\Pay\Pay::wechat()->pay($allPlugins, $params);
+
+        return $result;
     }
 }

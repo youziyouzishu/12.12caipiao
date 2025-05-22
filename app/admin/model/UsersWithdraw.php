@@ -3,11 +3,9 @@
 namespace app\admin\model;
 
 
-use GuzzleHttp\Client;
-use plugin\admin\app\common\Util;
-use plugin\admin\app\model\Base;
-use plugin\admin\app\model\User;
 
+
+use plugin\admin\app\model\Base;
 
 /**
  * 
@@ -26,6 +24,7 @@ use plugin\admin\app\model\User;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw query()
  * @property-read User|null $user
+ * @property string $ordersn 订单编号
  * @mixin \Eloquent
  */
 class UsersWithdraw extends Base
@@ -52,6 +51,7 @@ class UsersWithdraw extends Base
         'chance_rate',
         'status',
         'reason',
+        'ordersn',
     ];
 
     function user()

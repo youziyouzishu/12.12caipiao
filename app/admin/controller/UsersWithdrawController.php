@@ -3,11 +3,13 @@
 namespace app\admin\controller;
 
 use app\admin\model\User;
+use app\api\service\Pay;
 use support\Request;
 use support\Response;
 use app\admin\model\UsersWithdraw;
 use plugin\admin\app\controller\Crud;
 use support\exception\BusinessException;
+use Yansongda\Artful\Exception\InvalidResponseException;
 
 /**
  * 提现列表 
@@ -82,7 +84,14 @@ class UsersWithdrawController extends Crud
             }
             if ($row->status == 0 && $status == 1) {
                 //转账
-                User::score($row->withdraw_amount, $row->user_id, '提现驳回', 'money');
+                try {
+                    Pay::transfer($row->into_amount,$row->ordersn,$row->user->openid,'提现');
+                } catch (InvalidResponseException $e) {
+                    return $this->fail($e->response->message);
+                } catch (\Throwable $e){
+                    return $this->fail($e->getMessage());
+                }
+
             }
             if ($row->status == 0 && $status == 2) {
                 //驳回 返回余额

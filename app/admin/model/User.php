@@ -3,6 +3,7 @@
 namespace app\admin\model;
 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use plugin\admin\app\model\Base;
 use support\Db;
 
@@ -49,6 +50,7 @@ use support\Db;
  */
 class User extends Base
 {
+    use SoftDeletes;
     /**
      * The table associated with the model.
      *

@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\admin\model\GoodsOrders;
 use app\admin\model\Sms;
 use app\admin\model\User;
 use app\admin\model\UsersLayer;
@@ -40,6 +41,9 @@ class UserController extends Base
         $user = User::find($request->user_id);
         if ($user->first_buy_time && $user->vip_status == 1){
             $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
+            if ($days == 0){
+                $days = 1;
+            }
             $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
             $text = "尊敬的会员，今天是您第{$days}个幸运日，离下个幸运月还有{$next_days}天";
         }else{
@@ -171,6 +175,7 @@ class UserController extends Base
             'chance_amount' => $chance_amount,
             'into_amount' => $into_amount,
             'chance_rate' => $chance_rate,
+            'ordersn' => GoodsOrders::generateOrderSn(),
         ]);
         return $this->success('提交成功');
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "406e1799869abcc534145108fcc49312",
+    "content-hash": "3fa3c1f178e52b3180bfd7c68865ae1d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6541,11 +6541,16 @@
         },
         {
             "name": "yansongda/pay",
-            "version": "v3.7.13",
+            "version": "v3.7.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yansongda/pay.git",
+                "reference": "a000bd7dec9c98f64e70173559b9656702b21a79"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/yansongda/pay/v3.7.13/yansongda-pay-v3.7.13.zip",
-                "reference": "6e1678f44acb91ba78900eb74e307de415a54e9d",
+                "url": "https://api.github.com/repos/yansongda/pay/zipball/a000bd7dec9c98f64e70173559b9656702b21a79",
+                "reference": "a000bd7dec9c98f64e70173559b9656702b21a79",
                 "shasum": ""
             },
             "require": {
@@ -6584,6 +6589,7 @@
                     "Yansongda\\Pay\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6604,7 +6610,7 @@
                 "issues": "https://github.com/yansongda/pay/issues",
                 "source": "https://github.com/yansongda/pay"
             },
-            "time": "2025-02-11T04:04:44+00:00"
+            "time": "2025-04-12T02:09:16+00:00"
         },
         {
             "name": "yansongda/supports",
