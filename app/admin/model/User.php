@@ -46,6 +46,10 @@ use support\Db;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $children
  * @property-read User|null $parent
  * @property \Illuminate\Support\Carbon|null $first_buy_time 第一次购买商品时间
+ * @property \Illuminate\Support\Carbon|null $deleted_at 删除时间
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
  * @mixin \Eloquent
  */
 class User extends Base

@@ -41,9 +41,7 @@ class UserController extends Crud
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
         $query = $this->doSelect($where, $field, $order)
             ->withCount(['children as children_vip_count'=>function ($query) {
-                $query->where('vip_expire_time', '>', Carbon::now())->whereHas('vipOrders', function ($query) {
-                    $query->where('status', 1);
-                });
+                $query->where('vip_expire_time', '>', Carbon::now());
             }]);
         return $this->doFormat($query, $format, $limit);
     }

@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\admin\model\GoodsOrders;
 use app\admin\model\User;
+use app\admin\model\UsersWithdraw;
 use app\admin\model\VipOrders;
 use app\api\basic\Base;
 use Carbon\Carbon;
@@ -51,12 +52,24 @@ class NotifyController extends Base
         return $this->success();
     }
 
+    function transfer(Request $request)
+    {
+        $request->setParams('get', ['paytype' => 'transfer']);
+        try {
+            $this->pay($request);
+        } catch (\Throwable $e) {
+            return $this->fail($e->getMessage());
+        }
+        return $this->success();
+    }
+
     /**
      * 接受回调
      * @throws \Throwable
      */
     private function pay(Request $request)
     {
+        Log::info('支付回调', $request->all());
         Db::connection('plugin.admin.mysql')->beginTransaction();
         try {
             $paytype = $request->input('paytype');
@@ -109,6 +122,18 @@ class NotifyController extends Base
                     $out_trade_no = $request->input('out_trade_no');
                     $attach = $request->input('attach');
                     $paytype = 4;
+                    break;
+                case 'transfer':
+                    $pay = Pay::wechat($config);
+                    $res = $pay->callback($request->post());
+                    $res = $res->resource;
+                    $res = $res['ciphertext'];
+                    $trade_state = $res['state'];
+                    if ($trade_state !== 'SUCCESS') {
+                        throw new \Exception('支付失败');
+                    }
+                    $attach = 'transfer';
+                    $out_trade_no = $res['out_bill_no'];
                     break;
                 default:
                     throw new \Exception('支付类型错误');
@@ -179,6 +204,14 @@ class NotifyController extends Base
                         User::score(round($inc_jinbi * 0.2), $order->user->parent_id, '充值金币返佣', 'money');
                     }
                     break;
+                case 'transfer':
+                    $order = UsersWithdraw::where(['ordersn' => $out_trade_no, 'status' => 3])->first();
+                    if (!$order) {
+                        throw new \Exception('订单不存在');
+                    }
+                    $order->status = 2;
+                    $order->save();
+                    break;
                 default:
                     throw new \Exception('回调错误');
             }
@@ -190,5 +223,6 @@ class NotifyController extends Base
             throw new \Exception($e->getMessage());
         }
     }
+
 
 }

@@ -41,10 +41,11 @@ class UserController extends Base
         $user = User::find($request->user_id);
         if ($user->first_buy_time && $user->vip_status == 1){
             $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
-            if ($days == 0){
-                $days = 1;
-            }
             $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
+
+            $days += 1;
+            $next_days -= 1;
+
             $text = "尊敬的会员，今天是您第{$days}个幸运日，离下个幸运月还有{$next_days}天";
         }else{
             $text = '';
@@ -154,6 +155,15 @@ class UserController extends Base
     function doWithdraw(Request $request)
     {
         $withdraw_amount = $request->post('withdraw_amount');
+        if (empty($withdraw_amount)){
+            return $this->fail('请输入提现金额');
+        }
+        if ($withdraw_amount < 1) {
+            return $this->fail('提现金额不能小于1元');
+        }
+        if ($withdraw_amount > 200) {
+            return $this->fail('提现金额不能大于200元');
+        }
         $user = User::find($request->user_id);
         if ($user->vip_status != 1) {
             return $this->fail('非会员不能提现');
@@ -184,6 +194,7 @@ class UserController extends Base
     function getWithdrawList(Request $request)
     {
         $rows = UsersWithdraw::where('user_id', $request->user_id)
+            ->with(['user'])
             ->orderByDesc('id')
             ->paginate()
             ->items();
@@ -236,12 +247,12 @@ class UserController extends Base
     function getTeamList(Request $request)
     {
         $user = User::find($request->user_id);
-        $team_count = UsersLayer::where('parent_id',$user->id)->where('layer','<=',2)->count();#团队人数
-        $team_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer','<=',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#团队会员数
-        $direct_count = UsersLayer::where('parent_id',$user->id)->where('layer',1)->count();#直推人数
-        $direct_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer',1)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#直推会员数
-        $other_count = UsersLayer::where('parent_id',$user->id)->where('layer',2)->count();#间推人数
-        $other_vip_count = UsersLayer::where('parent_id',$user->id)->where('layer',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#间推会员数
+        $team_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer','<=',2)->count();#团队人数
+        $team_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer','<=',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#团队会员数
+        $direct_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',1)->count();#直推人数
+        $direct_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',1)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#直推会员数
+        $other_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',2)->count();#间推人数
+        $other_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#间推会员数
 
         return $this->success('获取成功',[
             'team_count' => $team_count,
@@ -341,6 +352,21 @@ class UserController extends Base
             $rows = UsersShoper::whereIn('user_id', $guanfang)->where(['status' => 1])->get();
         }
         return $this->success('获取成功', $rows);
+    }
+
+    /**
+     * 注销
+     * @param Request $request
+     * @return \support\Response
+     */
+    function logout(Request $request)
+    {
+        $user = User::find($request->user_id);
+        if ($user->money > 0){
+            return $this->fail('账户有余额不能注销');
+        }
+        $user->delete();
+        return $this->success();
     }
 
 

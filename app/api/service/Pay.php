@@ -87,6 +87,7 @@ class Pay
                     'info_content' => '注册会员抽奖一等奖'
                 ],
             ],
+            'notify_url' =>'https://zhying.top/api/notify/transfer',
             '_type' => 'app'
         ];
         $allPlugins = \Yansongda\Pay\Pay::wechat()->mergeCommonPlugins([\Yansongda\Pay\Plugin\Wechat\V3\Marketing\MchTransfer\CreatePlugin::class]);

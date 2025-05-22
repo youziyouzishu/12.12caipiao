@@ -85,13 +85,15 @@ class UsersWithdrawController extends Crud
             if ($row->status == 0 && $status == 1) {
                 //转账
                 try {
-                    Pay::transfer($row->into_amount,$row->ordersn,$row->user->openid,'提现');
+                    $result = Pay::transfer($row->into_amount,$row->ordersn,$row->user->openid,'提现');
                 } catch (InvalidResponseException $e) {
                     return $this->fail($e->response->message);
                 } catch (\Throwable $e){
                     return $this->fail($e->getMessage());
                 }
-
+                $request->setParams('post',[
+                    'package_info'=>$result['package_info']
+                ]);
             }
             if ($row->status == 0 && $status == 2) {
                 //驳回 返回余额

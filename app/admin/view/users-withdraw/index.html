@@ -92,7 +92,7 @@
                     name: "status",
                     filterable: true,
                     initValue: initValue,
-                    data: [{"value":"0","name":"待审核"},{"value":"1","name":"已打款"},{"value":"2","name":"驳回"}],
+                    data: [{"value":"0","name":"待审核"},{"value":"1","name":"待收款"},{"value":"2","name":"驳回"},{"value":"3","name":"已打款"}],
                     model: {"icon":"hidden","label":{"type":"text"}},
                     clickClose: true,
                     radio: true,
@@ -194,7 +194,7 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apiResults = {};
-				apiResults["status"] = ["待审核","已打款","驳回"];
+				apiResults["status"] = ["待审核","待收款","驳回","已打款"];
                 // 编辑或删除行事件
                 table.on("tool(data-table)", function(obj) {
                     if (obj.event === "remove") {
