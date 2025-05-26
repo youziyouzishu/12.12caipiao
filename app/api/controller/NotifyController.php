@@ -128,6 +128,7 @@ class NotifyController extends Base
                     $res = $pay->callback($request->post());
                     $res = $res->resource;
                     $res = $res['ciphertext'];
+                    Log::info('转账回调', $res);
                     $trade_state = $res['state'];
                     if ($trade_state !== 'SUCCESS') {
                         throw new \Exception('支付失败');
@@ -205,11 +206,11 @@ class NotifyController extends Base
                     }
                     break;
                 case 'transfer':
-                    $order = UsersWithdraw::where(['ordersn' => $out_trade_no, 'status' => 3])->first();
+                    $order = UsersWithdraw::where(['ordersn' => $out_trade_no, 'status' => 1])->first();
                     if (!$order) {
                         throw new \Exception('订单不存在');
                     }
-                    $order->status = 2;
+                    $order->status = 3;
                     $order->save();
                     break;
                 default:

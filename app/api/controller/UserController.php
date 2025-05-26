@@ -39,7 +39,7 @@ class UserController extends Base
             $request->user_id = $user_id;
         }
         $user = User::find($request->user_id);
-        if ($user->first_buy_time && $user->vip_status == 1){
+        if ($user->first_buy_time && $user->vip_status == 1) {
             $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
             $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
 
@@ -47,7 +47,7 @@ class UserController extends Base
             $next_days -= 1;
 
             $text = "尊敬的会员，今天是您第{$days}个幸运日，离下个幸运月还有{$next_days}天";
-        }else{
+        } else {
             $text = '';
         }
         $user->setAttribute('text', $text);
@@ -155,7 +155,7 @@ class UserController extends Base
     function doWithdraw(Request $request)
     {
         $withdraw_amount = $request->post('withdraw_amount');
-        if (empty($withdraw_amount)){
+        if (empty($withdraw_amount)) {
             return $this->fail('请输入提现金额');
         }
         if ($withdraw_amount < 1) {
@@ -247,14 +247,20 @@ class UserController extends Base
     function getTeamList(Request $request)
     {
         $user = User::find($request->user_id);
-        $team_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer','<=',2)->count();#团队人数
-        $team_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer','<=',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#团队会员数
-        $direct_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',1)->count();#直推人数
-        $direct_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',1)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#直推会员数
-        $other_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',2)->count();#间推人数
-        $other_vip_count = UsersLayer::where('parent_id',$user->id)->has('user')->where('layer',2)->whereHas('user',function ($query){$query->where('vip_expire_time', '>', Carbon::now());})->count();#间推会员数
+        $team_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', '<=', 2)->count();#团队人数
+        $team_vip_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', '<=', 2)->whereHas('user', function ($query) {
+            $query->where('vip_expire_time', '>', Carbon::now());
+        })->count();#团队会员数
+        $direct_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 1)->count();#直推人数
+        $direct_vip_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 1)->whereHas('user', function ($query) {
+            $query->where('vip_expire_time', '>', Carbon::now());
+        })->count();#直推会员数
+        $other_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 2)->count();#间推人数
+        $other_vip_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 2)->whereHas('user', function ($query) {
+            $query->where('vip_expire_time', '>', Carbon::now());
+        })->count();#间推会员数
 
-        return $this->success('获取成功',[
+        return $this->success('获取成功', [
             'team_count' => $team_count,
             'team_vip_count' => $team_vip_count,
             'direct_count' => $direct_count,
@@ -262,6 +268,59 @@ class UserController extends Base
             'other_count' => $other_count,
             'other_vip_count' => $other_vip_count,
         ]);
+    }
+
+    /**
+     * 获取直推团队
+     * @param Request $request
+     * @return \support\Response
+     */
+    function getDirectTeamList(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $children = $user->children;
+        $data = [];
+        foreach ($children as $child) {
+            $data[] = [
+                'id' => $child->id,
+                'name' => $child->nickname,
+                'type' => $child->vip_status ? '会员' : '用户',
+            ];
+        }
+        return $this->success('获取成功', $data);
+    }
+
+    function getDirectTeamDetail(Request $request)
+    {
+        $id = $request->post('id');
+        $user = User::find($id);
+        $children_count = $user->children()->count();
+        $children_vip_count = $user->children()->where('vip_expire_time', '>', Carbon::now())->count();
+        $children_user_count = $children_count - $children_vip_count;
+        return $this->success('获取成功', [
+            'children_count' => $children_count,
+            'children_vip_count' => $children_vip_count,
+            'children_user_count' => $children_user_count,
+        ]);
+    }
+
+    #获取间推团队
+    function getOtherTeamList(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $children_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 2)->count();
+        $children_vip_count = UsersLayer::where('parent_id', $user->id)->has('user')->where('layer', 2)->whereHas('user',function ($query){
+            $query->where('vip_expire_time', '>', Carbon::now());
+        })->count();
+        $children_user_count = $children_count - $children_vip_count;
+        $data = [
+            'children_count' => $children_count,
+            'children_vip_count' => $children_vip_count,
+            'children_user_count' => $children_user_count,
+        ];
+
+        return $this->success('获取成功', $data);
     }
 
     #申请成为店长
@@ -354,6 +413,7 @@ class UserController extends Base
         return $this->success('获取成功', $rows);
     }
 
+
     /**
      * 注销
      * @param Request $request
@@ -362,7 +422,7 @@ class UserController extends Base
     function logout(Request $request)
     {
         $user = User::find($request->user_id);
-        if ($user->money > 0){
+        if ($user->money > 0) {
             return $this->fail('账户有余额不能注销');
         }
         $user->delete();
