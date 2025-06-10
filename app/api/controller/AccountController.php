@@ -92,19 +92,14 @@ class AccountController extends Base
                 'parent_id' => $parent->id,
                 'layer' => 1
             ]);
-            // 收集多层关系数据
-            $layersToInsert = [];
-            UsersLayer::where('user_id', $parent->id)->get()->each(function (UsersLayer $item) use ($user, &$layersToInsert) {
-                $layersToInsert[] = [
+            UsersLayer::where('user_id', $parent->id)->get()->each(function (UsersLayer $item) use ($user) {
+                UsersLayer::create([
                     'user_id' => $user->id,
                     'parent_id' => $item->parent_id,
                     'layer' => $item->layer + 1
-                ];
+                ]);
             });
-            // 批量插入多层关系
-            if (!empty($layersToInsert)) {
-                UsersLayer::insert($layersToInsert);
-            }
+
         }
 
         $token = JwtToken::generateToken([

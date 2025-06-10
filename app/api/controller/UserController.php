@@ -41,11 +41,8 @@ class UserController extends Base
         $user = User::find($request->user_id);
         if ($user->first_buy_time && $user->vip_status == 1) {
             $days = (int)$user->first_buy_time->diffInDays(Carbon::now());
-            $next_days = (int)$user->first_buy_time->diffInDays($user->vip_expire_time);
-
             $days += 1;
-            $next_days -= 1;
-
+            $next_days = 30 - $days;
             $text = "尊敬的会员，今天是您第{$days}个幸运日，离下个幸运月还有{$next_days}天";
         } else {
             $text = '';
@@ -186,6 +183,9 @@ class UserController extends Base
             'into_amount' => $into_amount,
             'chance_rate' => $chance_rate,
             'ordersn' => GoodsOrders::generateOrderSn(),
+            'openid' => $user->openid,
+            'mchid' => config('payment.wechat.default.mch_id'),
+            'appid' => config('payment.wechat.default.app_id'),
         ]);
         return $this->success('提交成功');
     }
@@ -281,10 +281,13 @@ class UserController extends Base
         $children = $user->children;
         $data = [];
         foreach ($children as $child) {
+            $children_count = $child->children()->count();
+
             $data[] = [
                 'id' => $child->id,
                 'name' => $child->nickname,
                 'type' => $child->vip_status ? '会员' : '用户',
+                'children_count' => $children_count,
             ];
         }
         return $this->success('获取成功', $data);

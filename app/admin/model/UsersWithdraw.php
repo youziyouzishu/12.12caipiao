@@ -53,7 +53,10 @@ class UsersWithdraw extends Base
         'status',
         'reason',
         'ordersn',
-        'package_info'
+        'package_info',
+        'openid',
+        'mchid',
+        'appid'
     ];
 
     protected $appends = ['status_text'];

@@ -15,6 +15,8 @@ use Webman\RedisQueue\Client;
 
 class GoodsController extends Base
 {
+
+    protected array $noNeedLogin = ['detail','getCommentList'];
     function select(Request $request)
     {
         $order = $request->post('order');#排序:1=综合,2=销量升序,3=销量降序,4=价格升序,5=价格降序,6=最新
